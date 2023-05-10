@@ -16,7 +16,8 @@ import com.example.skillcinema.model.data.apiNew.Item
 class NewListAdapter(
     private val movies: List<Item>,
     private val isAllMovies: Boolean = false,
-    private val allMoviesBtnListener: () -> Unit
+    private val allMoviesBtnListener: () -> Unit,
+    private val singleMovieListener: (Int) -> Unit,
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -66,6 +67,10 @@ class NewListAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(movie: Item) = with(binding) {
+
+            itemView.setOnClickListener {
+                singleMovieListener(movie.kinopoiskId)
+            }
 
             rateContainer.isVisible = false
 

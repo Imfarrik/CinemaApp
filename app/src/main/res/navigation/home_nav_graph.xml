@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_homeFragment_to_allMoviesFragment"
             app:destination="@id/allMoviesFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_singleMovieFragment2"
+            app:destination="@id/singleMovieFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -26,12 +29,24 @@
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/allMoviesFragment"
-        android:name="com.example.skillcinema.ui.home_page.all_movies.AllMoviesFragment"
+        android:name="com.example.skillcinema.ui.all_movies_page.AllMoviesFragment"
         android:label="fragment_all_movies"
         tools:layout="@layout/fragment_all_movies">
         <argument
             android:name="header_title"
             app:argType="string" />
+        <action
+            android:id="@+id/action_allMoviesFragment_to_singleMovieFragment"
+            app:destination="@id/singleMovieFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/singleMovieFragment"
+        android:name="com.example.skillcinema.ui.single_movie_page.SingleMovieFragment"
+        android:label="fragment_single_movie"
+        tools:layout="@layout/fragment_single_movie" >
+        <argument
+            android:name="movie_id"
+            app:argType="integer" />
     </fragment>
 
 

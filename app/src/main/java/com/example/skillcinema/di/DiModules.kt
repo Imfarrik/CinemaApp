@@ -43,8 +43,12 @@ class DomainModule {
     }
 
     @Provides
-    fun providerRepository(serviceApi: ServiceApi, appDatabase: AppDatabase): Repository {
-        return Repository(serviceApi, appDatabase)
+    fun providerRepository(
+        serviceApi: ServiceApi,
+        appDatabase: AppDatabase,
+        sharedPreferencesManager: SharedPreferencesManager
+    ): Repository {
+        return Repository(serviceApi, appDatabase, sharedPreferencesManager)
     }
 
 }

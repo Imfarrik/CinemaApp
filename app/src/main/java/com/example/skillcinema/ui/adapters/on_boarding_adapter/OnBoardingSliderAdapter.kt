@@ -1,4 +1,4 @@
-package com.example.skillcinema.ui.adapters
+package com.example.skillcinema.ui.adapters.on_boarding_adapter
 
 import android.view.LayoutInflater
 import android.view.View

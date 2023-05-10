@@ -72,7 +72,7 @@ class HomeFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.state.collect {
+                viewModel.repository.state.collect {
                     when (it) {
                         State.Loading -> {
                             nestedScrollView.isVisible = false
@@ -107,13 +107,21 @@ class HomeFragment : Fragment() {
 
     private fun initRv(viewHolders: List<MovieHolderBinding>) {
         viewModel.repository.newMovies.observe(viewLifecycleOwner) {
-            viewHolders[0].rvMovie.adapter = NewListAdapter(it.items, false) {
+            viewHolders[0].rvMovie.adapter = NewListAdapter(it.items, false, {
                 findNavController().navigate(
                     HomeFragmentDirections.actionHomeFragmentToAllMoviesFragment(
                         viewHolders[0].holderType.text as String
                     )
                 )
-            }
+            }, { movie_id ->
+
+                findNavController().navigate(
+                    HomeFragmentDirections.actionHomeFragmentToSingleMovieFragment2(
+                        movie_id
+                    )
+                )
+
+            })
         }
 
         viewModel.repository.topMovies.observe(viewLifecycleOwner) {
@@ -126,6 +134,7 @@ class HomeFragment : Fragment() {
 
         viewModel.repository.randomMovies.observe(viewLifecycleOwner) {
             viewHolders[2].rvMovie.adapter = FilmListAdapter(it.items)
+            viewModel.insert(MoviesHolder(viewHolders[2].holderType.text as String, 2))
         }
 
         viewModel.repository.top250Movies.observe(viewLifecycleOwner) {

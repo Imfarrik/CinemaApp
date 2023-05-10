@@ -1,24 +1,25 @@
-package com.example.skillcinema.ui.home_page.all_movies
+package com.example.skillcinema.ui.all_movies_page
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.skillcinema.R
 import com.example.skillcinema.databinding.FragmentAllMoviesBinding
 import com.example.skillcinema.model.repository.State
 import com.example.skillcinema.ui.Helper
+import com.example.skillcinema.ui.adapters.all_movies.RandomPagePagingAdapter
+import com.example.skillcinema.ui.adapters.all_movies.TopPagePagingAdapter
 import com.example.skillcinema.ui.adapters.home_adapter.NewListAdapter
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class AllMoviesFragment : Fragment() {
@@ -50,7 +51,7 @@ class AllMoviesFragment : Fragment() {
 
         header.apply {
 
-            viewModel.title.observe(viewLifecycleOwner) { title ->
+            viewModel.repository.title.observe(viewLifecycleOwner) { title ->
                 headerTitle.text = title
             }
 
@@ -60,7 +61,7 @@ class AllMoviesFragment : Fragment() {
 
         }
 
-//        viewModel.getMovies(args.headerTitle)
+        viewModel.getAllTypes(args.headerTitle)
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -88,8 +89,54 @@ class AllMoviesFragment : Fragment() {
 
             layoutManager = GridLayoutManager(requireContext(), 3)
 
-            viewModel.newMovies.observe(viewLifecycleOwner) {
-                adapter = NewListAdapter(it.items, true) {}
+            when (args.headerTitle.toInt()) {
+                0 -> {
+                    viewModel.repository.newMovies.observe(viewLifecycleOwner) {
+                        adapter = NewListAdapter(it.items, true, {}, { film_id ->
+                            findNavController().navigate(
+                                AllMoviesFragmentDirections.actionAllMoviesFragmentToSingleMovieFragment(
+                                    film_id
+                                )
+                            )
+                        })
+                    }
+                }
+                1 -> {
+                    val adapterPaging = TopPagePagingAdapter()
+                    adapter = adapterPaging
+                    lifecycleScope.launch {
+                        repeatOnLifecycle(Lifecycle.State.CREATED) {
+                            viewModel.popular.collectLatest(adapterPaging::submitData)
+                        }
+                    }
+                }
+                2 -> {
+                    val adapterPaging = RandomPagePagingAdapter()
+                    adapter = adapterPaging
+                    lifecycleScope.launch {
+                        repeatOnLifecycle(Lifecycle.State.CREATED) {
+                            viewModel.random.collectLatest(adapterPaging::submitData)
+                        }
+                    }
+                }
+                3 -> {
+                    val adapterPaging = TopPagePagingAdapter()
+                    adapter = adapterPaging
+                    lifecycleScope.launch {
+                        repeatOnLifecycle(Lifecycle.State.CREATED) {
+                            viewModel.top250.collectLatest(adapterPaging::submitData)
+                        }
+                    }
+                }
+                4 -> {
+                    val adapterPaging = RandomPagePagingAdapter()
+                    adapter = adapterPaging
+                    lifecycleScope.launch {
+                        repeatOnLifecycle(Lifecycle.State.CREATED) {
+                            viewModel.serials.collectLatest(adapterPaging::submitData)
+                        }
+                    }
+                }
             }
 
 

@@ -15,7 +15,7 @@ import com.example.skillcinema.databinding.FragmentOnBoardingBinding
 import com.example.skillcinema.domain.SharedPreferencesManager
 import com.example.skillcinema.ui.Helper.insets
 import com.example.skillcinema.ui.Navigator
-import com.example.skillcinema.ui.adapters.OnBoardingSliderAdapter
+import com.example.skillcinema.ui.adapters.on_boarding_adapter.OnBoardingSliderAdapter
 import javax.inject.Inject
 
 class OnBoardingFragment : Fragment() {

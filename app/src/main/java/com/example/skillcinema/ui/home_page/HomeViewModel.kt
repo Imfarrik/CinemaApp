@@ -21,10 +21,8 @@ class HomeViewModel : ViewModel() {
     init {
         App.getAppComponent().inject(this)
         sharedPreferencesManager.saveAuthToken(Constants.API_KEY)
-        repository.getNewMovie()
+        repository.getMovies()
     }
-
-    val state = repository.state
 
     fun insert(moviesHolder: MoviesHolder) = viewModelScope.launch {
         repository.insertMovieType(moviesHolder)
