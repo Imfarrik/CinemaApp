@@ -1,12 +1,15 @@
 package com.example.skillcinema.di
 
 import android.content.Context
+import androidx.room.Room
 import com.example.skillcinema.model.network.HeaderInterceptor
 import com.example.skillcinema.domain.Constants
 import com.example.skillcinema.domain.SharedPreferencesManager
 import com.example.skillcinema.model.network.Api
 import com.example.skillcinema.model.network.ApiImpl
 import com.example.skillcinema.model.network.ServiceApi
+import com.example.skillcinema.model.repository.Repository
+import com.example.skillcinema.room.AppDatabase
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -32,13 +35,17 @@ class DomainModule {
     fun providerSharedPreferencesManager(context: Context): SharedPreferencesManager {
         return SharedPreferencesManager(context)
     }
-//
-//    @Provides
-//    fun providerAppDatabase(context: Context): AppDatabase {
-//        return Room.databaseBuilder(context, AppDatabase::class.java, "AsakaAC_Database")
-//            .addMigrations(MIGRATION_1_2)
-//            .build()
-//    }
+
+    @Provides
+    fun providerAppDatabase(context: Context): AppDatabase {
+        return Room.databaseBuilder(context, AppDatabase::class.java, "Database")
+            .build()
+    }
+
+    @Provides
+    fun providerRepository(serviceApi: ServiceApi, appDatabase: AppDatabase): Repository {
+        return Repository(serviceApi, appDatabase)
+    }
 
 }
 

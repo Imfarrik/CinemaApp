@@ -14,6 +14,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.skillcinema.databinding.FragmentHomeBinding
+import com.example.skillcinema.databinding.MovieHolderBinding
+import com.example.skillcinema.model.data.db.MoviesHolder
 import com.example.skillcinema.model.repository.State
 import com.example.skillcinema.ui.Helper
 import com.example.skillcinema.ui.adapters.home_adapter.FilmListAdapter
@@ -27,8 +29,7 @@ class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by viewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         vb = FragmentHomeBinding.inflate(layoutInflater, container, false)
         return vb.root
@@ -47,30 +48,22 @@ class HomeFragment : Fragment() {
 
     private fun initView() = with(vb) {
 
-        val types =
-            listOf("Примьеры", "Популярное", "-", "Топ-250", "Сериалы")
+        val types = listOf("Примьеры", "Популярное", "-", "Топ-250", "Сериалы")
 
         val viewHolders = listOf(
-            newMovie,
-            popular,
-            USA,
-            top,
-            serials
+            newMovie, popular, USA, top, serials
         )
 
         for (i in viewHolders.indices) {
             viewHolders[i].apply {
                 holderType.text = types[i]
-                rvMovie.layoutManager =
-                    LinearLayoutManager(
-                        requireContext(),
-                        LinearLayoutManager.HORIZONTAL,
-                        false
-                    )
+                rvMovie.layoutManager = LinearLayoutManager(
+                    requireContext(), LinearLayoutManager.HORIZONTAL, false
+                )
                 btnAll.setOnClickListener {
                     findNavController().navigate(
                         HomeFragmentDirections.actionHomeFragmentToAllMoviesFragment(
-                            holderType.text as String
+                            i.toString()
                         )
                     )
                 }
@@ -88,6 +81,17 @@ class HomeFragment : Fragment() {
                         State.Success -> {
                             loader.isVisible = false
                             nestedScrollView.isVisible = true
+                            initRv(viewHolders)
+
+                            for (i in viewHolders.indices) {
+                                viewModel.insert(
+                                    MoviesHolder(
+                                        viewHolders[i].holderType.text as String,
+                                        i
+                                    )
+                                )
+                            }
+
                         }
                         is State.ServerError -> {
                             Helper.setToast(requireContext(), it.message)
@@ -98,31 +102,39 @@ class HomeFragment : Fragment() {
             }
         }
 
-        viewModel.newMovies.observe(viewLifecycleOwner) {
-            viewHolders[0].rvMovie.adapter = NewListAdapter(it.items)
+
+    }
+
+    private fun initRv(viewHolders: List<MovieHolderBinding>) {
+        viewModel.repository.newMovies.observe(viewLifecycleOwner) {
+            viewHolders[0].rvMovie.adapter = NewListAdapter(it.items, false) {
+                findNavController().navigate(
+                    HomeFragmentDirections.actionHomeFragmentToAllMoviesFragment(
+                        viewHolders[0].holderType.text as String
+                    )
+                )
+            }
         }
 
-        viewModel.topMovies.observe(viewLifecycleOwner) {
+        viewModel.repository.topMovies.observe(viewLifecycleOwner) {
             viewHolders[1].rvMovie.adapter = TopListAdapter(it.films)
         }
 
-        viewModel.randomName.observe(viewLifecycleOwner) {
+        viewModel.repository.randomName.observe(viewLifecycleOwner) {
             viewHolders[2].holderType.text = it
         }
 
-        viewModel.randomMovies.observe(viewLifecycleOwner) {
+        viewModel.repository.randomMovies.observe(viewLifecycleOwner) {
             viewHolders[2].rvMovie.adapter = FilmListAdapter(it.items)
         }
 
-        viewModel.top250Movies.observe(viewLifecycleOwner) {
+        viewModel.repository.top250Movies.observe(viewLifecycleOwner) {
             viewHolders[3].rvMovie.adapter = TopListAdapter(it.films)
         }
 
-        viewModel.topSeries.observe(viewLifecycleOwner) {
+        viewModel.repository.topSeries.observe(viewLifecycleOwner) {
             viewHolders[4].rvMovie.adapter = FilmListAdapter(it.items)
         }
-
-
     }
 
 

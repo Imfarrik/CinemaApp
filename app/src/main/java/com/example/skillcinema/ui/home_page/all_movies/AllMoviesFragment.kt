@@ -46,16 +46,21 @@ class AllMoviesFragment : Fragment() {
 
     private fun initView() = with(vb) {
 
+        viewModel.getAllTypes(args.headerTitle)
+
         header.apply {
 
-            headerTitle.text = args.headerTitle
+            viewModel.title.observe(viewLifecycleOwner) { title ->
+                headerTitle.text = title
+            }
+
             btnBack.setOnClickListener {
                 requireActivity().onBackPressedDispatcher.onBackPressed()
             }
 
         }
 
-        viewModel.getMovies(args.headerTitle)
+//        viewModel.getMovies(args.headerTitle)
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -81,10 +86,10 @@ class AllMoviesFragment : Fragment() {
 
         movieRv.apply {
 
-            layoutManager = GridLayoutManager(requireContext(), 2)
+            layoutManager = GridLayoutManager(requireContext(), 3)
 
             viewModel.newMovies.observe(viewLifecycleOwner) {
-                adapter = NewListAdapter(it.items)
+                adapter = NewListAdapter(it.items, true) {}
             }
 
 

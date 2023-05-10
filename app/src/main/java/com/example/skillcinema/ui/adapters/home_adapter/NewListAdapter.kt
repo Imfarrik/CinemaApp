@@ -13,20 +13,32 @@ import com.example.skillcinema.domain.Constants.DEFAULT_VIEW_TYPE
 import com.example.skillcinema.domain.Constants.MAX_ITEMS
 import com.example.skillcinema.model.data.apiNew.Item
 
-class NewListAdapter(private val movies: List<Item>) :
+class NewListAdapter(
+    private val movies: List<Item>,
+    private val isAllMovies: Boolean = false,
+    private val allMoviesBtnListener: () -> Unit
+) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemCount(): Int {
-        return if (movies.size > MAX_ITEMS) {
-            MAX_ITEMS + 1
+        return if (!isAllMovies) {
+            if (movies.size > MAX_ITEMS) {
+                MAX_ITEMS + 1
+            } else {
+                movies.size
+            }
         } else {
             movies.size
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position == MAX_ITEMS) {
-            ALL_ITEMS_VIEW_TYPE
+        return if (!isAllMovies) {
+            if (position == MAX_ITEMS) {
+                ALL_ITEMS_VIEW_TYPE
+            } else {
+                DEFAULT_VIEW_TYPE
+            }
         } else {
             DEFAULT_VIEW_TYPE
         }
@@ -72,7 +84,8 @@ class NewListAdapter(private val movies: List<Item>) :
 
         init {
             binding.btnAll.setOnClickListener {
-                Toast.makeText(itemView.context, "Hello", Toast.LENGTH_SHORT).show()
+                allMoviesBtnListener
+//                Toast.makeText(itemView.context, "Hello", Toast.LENGTH_SHORT).show()
             }
         }
 
