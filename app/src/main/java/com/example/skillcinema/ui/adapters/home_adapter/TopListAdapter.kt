@@ -13,7 +13,11 @@ import com.example.skillcinema.domain.Constants.MAX_ITEMS
 import com.example.skillcinema.model.data.apiNew.Item
 import com.example.skillcinema.model.data.apiTop.Film
 
-class TopListAdapter(private val movies: List<Film>) :
+class TopListAdapter(
+    private val movies: List<Film>,
+    private val clickListener: (Int) -> Unit,
+    private val allMoviesBtnListener: () -> Unit,
+) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun getItemCount(): Int {
@@ -55,6 +59,10 @@ class TopListAdapter(private val movies: List<Film>) :
 
         fun bind(movie: Film) = with(binding) {
 
+            itemView.setOnClickListener {
+                clickListener(movie.filmId)
+            }
+
             Glide.with(itemView.context)
                 .load(movie.posterUrlPreview)
                 .into(imageView)
@@ -70,7 +78,7 @@ class TopListAdapter(private val movies: List<Film>) :
 
         init {
             binding.btnAll.setOnClickListener {
-                Toast.makeText(itemView.context, "Hello", Toast.LENGTH_SHORT).show()
+                allMoviesBtnListener()
             }
         }
 

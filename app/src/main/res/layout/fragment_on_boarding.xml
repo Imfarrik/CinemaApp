@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.on_boarding_page.OnBoardingFragment">
+    tools:context=".ui.pages.on_boarding_page.OnBoardingFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container"

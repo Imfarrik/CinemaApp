@@ -12,6 +12,7 @@ class SharedPreferencesManager(context: Context) {
         const val IS_WAS_OPENED = "is_was_opened"
         const val COUNTRY_ID = "country_id"
         const val GENRES_ID = "genres_id"
+        const val MOVIE_ID = "movie_id"
 
     }
 
@@ -60,6 +61,18 @@ class SharedPreferencesManager(context: Context) {
 
     fun getGenreId(): Int {
         return preferences.getInt(GENRES_ID, 1)
+    }
+
+    fun saveMovieId(id: Int) {
+        val editor = preferences.edit()
+        editor.apply {
+            putInt(MOVIE_ID, id)
+            apply()
+        }
+    }
+
+    fun getMovieId(): Int {
+        return preferences.getInt(MOVIE_ID, 1)
     }
 
 

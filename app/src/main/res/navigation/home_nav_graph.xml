@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.skillcinema.ui.home_page.HomeFragment"
+        android:name="com.example.skillcinema.ui.pages.home_page.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home">
         <action
@@ -19,17 +19,17 @@
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.skillcinema.ui.search_page.SearchFragment"
+        android:name="com.example.skillcinema.ui.pages.search_page.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.skillcinema.ui.profile_page.ProfileFragment"
+        android:name="com.example.skillcinema.ui.pages.profile_page.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/allMoviesFragment"
-        android:name="com.example.skillcinema.ui.all_movies_page.AllMoviesFragment"
+        android:name="com.example.skillcinema.ui.pages.all_movies_page.AllMoviesFragment"
         android:label="fragment_all_movies"
         tools:layout="@layout/fragment_all_movies">
         <argument
@@ -41,13 +41,39 @@
     </fragment>
     <fragment
         android:id="@+id/singleMovieFragment"
-        android:name="com.example.skillcinema.ui.single_movie_page.SingleMovieFragment"
+        android:name="com.example.skillcinema.ui.pages.single_movie_page.SingleMovieFragment"
         android:label="fragment_single_movie"
-        tools:layout="@layout/fragment_single_movie" >
+        tools:layout="@layout/fragment_single_movie">
         <argument
             android:name="movie_id"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_singleMovieFragment_to_actorFragment"
+            app:destination="@id/actorFragment" />
+        <action
+            android:id="@+id/action_singleMovieFragment_to_galleryFragment"
+            app:destination="@id/galleryFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/actorFragment"
+        android:name="com.example.skillcinema.ui.pages.actor_page.ActorFragment"
+        android:label="fragment_actor"
+        tools:layout="@layout/fragment_actor">
+        <argument
+            android:name="staff_id"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_actorFragment_to_singleMovieFragment"
+            app:destination="@id/singleMovieFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/actorFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/galleryFragment"
+        android:name="com.example.skillcinema.ui.pages.gallery_page.GalleryFragment"
+        android:label="fragment_gallery"
+        tools:layout="@layout/fragment_gallery" />
 
 
 </navigation>

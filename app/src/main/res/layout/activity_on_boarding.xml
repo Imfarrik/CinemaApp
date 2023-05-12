@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.on_boarding_page.OnBoardingActivity">
+    tools:context=".ui.pages.on_boarding_page.OnBoardingActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/on_boarding_activity_fragment_container_view"

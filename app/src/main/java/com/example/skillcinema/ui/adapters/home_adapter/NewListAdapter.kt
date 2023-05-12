@@ -89,8 +89,7 @@ class NewListAdapter(
 
         init {
             binding.btnAll.setOnClickListener {
-                allMoviesBtnListener
-//                Toast.makeText(itemView.context, "Hello", Toast.LENGTH_SHORT).show()
+                allMoviesBtnListener()
             }
         }
 

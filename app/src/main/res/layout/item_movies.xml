@@ -58,6 +58,7 @@
         android:layout_marginTop="8dp"
         android:fontFamily="@font/graphik_regular"
         android:text="Name"
+        android:maxLines="2"
         android:textColor="#272727"
         android:textSize="14sp"
         app:layout_constraintTop_toBottomOf="parent" />

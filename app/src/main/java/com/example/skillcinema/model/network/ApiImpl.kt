@@ -2,8 +2,12 @@ package com.example.skillcinema.model.network
 
 import com.example.skillcinema.model.data.apiFilms.ApiFilms
 import com.example.skillcinema.model.data.apiFilter.ApiFilter
+import com.example.skillcinema.model.data.apiImages.ApiImages
 import com.example.skillcinema.model.data.apiNew.ApiNewMovies
+import com.example.skillcinema.model.data.apiSimilars.ApiSimilars
 import com.example.skillcinema.model.data.apiSingleMovie.ApiSingleMovie
+import com.example.skillcinema.model.data.apiSingleStaff.ApiSingleStaff
+import com.example.skillcinema.model.data.apiStaff.ApiStaff
 import com.example.skillcinema.model.data.apiTop.ApiTop
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
@@ -31,7 +35,7 @@ class ApiImpl(private val api: Api) : ServiceApi {
         countries: Int,
         genres: Int,
         order: String,
-        type: String
+        type: String,
     ): Single<ApiFilms> {
         return api.getFilms(countries, genres, order, type).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -51,7 +55,7 @@ class ApiImpl(private val api: Api) : ServiceApi {
         genres: Int,
         order: String,
         type: String,
-        page: Int
+        page: Int,
     ): Response<ApiFilms> {
         return api.getFilmsPage(countries, genres, order, type, page)
     }
@@ -62,6 +66,25 @@ class ApiImpl(private val api: Api) : ServiceApi {
 
     override fun getSingleMovie(id: Int): Single<ApiSingleMovie> {
         return api.getSingleMovie(id).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    override fun getStaff(id: Int): Single<ApiStaff> {
+        return api.getStaff(id).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    override suspend fun getImages(id: Int, type: String, page: Int): Response<ApiImages> {
+        return api.getImages(id, type, page)
+    }
+
+    override fun getSimilar(id: Int): Single<ApiSimilars> {
+        return api.getSimilar(id).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    override fun getSingleStaff(id: Int): Single<ApiSingleStaff> {
+        return api.getSingleStaff(id).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
 

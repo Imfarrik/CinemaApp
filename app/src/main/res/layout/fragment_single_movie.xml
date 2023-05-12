@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.single_movie_page.SingleMovieFragment">
+    tools:context=".ui.pages.single_movie_page.SingleMovieFragment">
 
     <LinearLayout
         android:id="@+id/loader"
@@ -20,7 +20,8 @@
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:overScrollMode="never">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -66,7 +67,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/graphik_semi_bold"
-                        android:text="The Matrix"
                         android:textColor="@color/white"
                         android:textSize="30sp" />
 
@@ -76,7 +76,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:fontFamily="@font/graphik_regular"
-                        android:text="6.4, Китобой"
                         android:textColor="#B5B5C9"
                         android:textSize="12sp" />
 
@@ -86,7 +85,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:fontFamily="@font/graphik_regular"
-                        android:text="2020, драма, приключения"
                         android:textColor="#B5B5C9"
                         android:textSize="12sp" />
 
@@ -97,7 +95,6 @@
                         android:layout_marginTop="4dp"
                         android:layout_marginBottom="6dp"
                         android:fontFamily="@font/graphik_regular"
-                        android:text="Россия, 1 ч 33 мин, 16+"
                         android:textColor="#B5B5C9"
                         android:textSize="12sp" />
 
@@ -113,7 +110,6 @@
                 android:layout_marginHorizontal="26dp"
                 android:layout_marginTop="40dp"
                 android:fontFamily="@font/graphik_black"
-                android:text="Чукотский парень влюбляется  в американскую вебкам-модель. Приз Венеции, Кристина Асмус  в роли девушки мечты"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -123,9 +119,57 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="26dp"
                 android:layout_marginTop="20dp"
+                android:clickable="true"
+                android:ellipsize="end"
+                android:focusable="true"
                 android:fontFamily="@font/graphik_regular"
-                android:text="Чукотский парень влюбляется  в американскую вебкам-модель. Приз Венеции, Кристина Асмус  в роли девушки мечты"
+                android:maxLines="4"
                 android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp">
+
+                <include
+                    android:id="@+id/actor"
+                    layout="@layout/single_movie_view_holder" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp">
+
+                <include
+                    android:id="@+id/staff_lay"
+                    layout="@layout/single_movie_view_holder" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp">
+
+                <include
+                    android:id="@+id/gallery"
+                    layout="@layout/single_movie_view_holder" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp">
+
+                <include
+                    android:id="@+id/same_movies"
+                    layout="@layout/single_movie_view_holder" />
+
+            </LinearLayout>
+
 
         </LinearLayout>
 
