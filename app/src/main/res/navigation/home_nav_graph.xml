@@ -53,6 +53,9 @@
         <action
             android:id="@+id/action_singleMovieFragment_to_galleryFragment"
             app:destination="@id/galleryFragment" />
+        <action
+            android:id="@+id/action_singleMovieFragment_to_seasonsFragment"
+            app:destination="@id/seasonsFragment" />
     </fragment>
     <fragment
         android:id="@+id/actorFragment"
@@ -68,12 +71,40 @@
             app:launchSingleTop="true"
             app:popUpTo="@id/actorFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_actorFragment_to_filmographyFragment"
+            app:destination="@id/filmographyFragment" />
+        <action
+            android:id="@+id/action_actorFragment_to_allMoviesFragment"
+            app:destination="@id/allMoviesFragment" />
     </fragment>
     <fragment
         android:id="@+id/galleryFragment"
         android:name="com.example.skillcinema.ui.pages.gallery_page.GalleryFragment"
         android:label="fragment_gallery"
         tools:layout="@layout/fragment_gallery" />
+    <fragment
+        android:id="@+id/filmographyFragment"
+        android:name="com.example.skillcinema.ui.pages.filmography_page.FilmographyFragment"
+        android:label="fragment_filmography"
+        tools:layout="@layout/fragment_filmography" >
+        <argument
+            android:name="singleStuffItems"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_filmographyFragment_to_singleMovieFragment"
+            app:destination="@id/singleMovieFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/seasonsFragment"
+        android:name="com.example.skillcinema.ui.pages.seasons_page.SeasonsFragment"
+        android:label="fragment_seasons"
+        tools:layout="@layout/fragment_seasons" >
+        <argument
+            android:name="seasons"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 
 
 </navigation>

@@ -29,7 +29,7 @@
                 android:id="@+id/type_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
+                android:paddingEnd="10dp"
                 android:fontFamily="@font/graphik_regular"
                 android:text="@string/app_name"
                 android:textColor="@color/black"

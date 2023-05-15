@@ -5,11 +5,13 @@ import com.example.skillcinema.model.data.apiFilms.ApiFilms
 import com.example.skillcinema.model.data.apiFilter.ApiFilter
 import com.example.skillcinema.model.data.apiImages.ApiImages
 import com.example.skillcinema.model.data.apiNew.ApiNewMovies
+import com.example.skillcinema.model.data.apiSeason.ApiSeason
 import com.example.skillcinema.model.data.apiSimilars.ApiSimilars
 import com.example.skillcinema.model.data.apiSingleMovie.ApiSingleMovie
 import com.example.skillcinema.model.data.apiSingleStaff.ApiSingleStaff
 import com.example.skillcinema.model.data.apiStaff.ApiStaff
 import com.example.skillcinema.model.data.apiTop.ApiTop
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import retrofit2.Response
 import retrofit2.http.GET
@@ -64,6 +66,24 @@ interface ServiceApi {
     fun getSimilar(id: Int): Single<ApiSimilars>
 
     fun getSingleStaff(id: Int): Single<ApiSingleStaff>
+
+    fun getSingleSeason(id: Int): Single<ApiSeason>
+
+    fun search(
+        order: String,
+        countries: Int,
+        genres: Int,
+        type: String,
+        page: Int,
+        ratingFrom: Int,
+        ratingTo: Int,
+        yearFrom: Int,
+        yearTo: Int,
+        imdbId: Int,
+        keyword: String,
+    ): Observable<ApiFilms>
+
+    fun searchKeyWord(keyword: String): Observable<ApiFilms>
 
 
 }

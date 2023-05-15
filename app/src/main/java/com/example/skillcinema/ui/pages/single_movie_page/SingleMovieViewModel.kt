@@ -25,6 +25,11 @@ class SingleMovieViewModel : ViewModel() {
     val staff = repository.staff
     val images = repository.images
     val similar = repository.similar
+    val season = repository.season
+
+    fun getSeason(id: Int) {
+        repository.getSeason(id)
+    }
 
     fun getStaff(id: Int) {
         repository.getActors(id)

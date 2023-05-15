@@ -8,6 +8,7 @@ import com.example.skillcinema.domain.SharedPreferencesManager
 import com.example.skillcinema.model.data.apiFilms.ApiFilms
 import com.example.skillcinema.model.data.apiImages.ApiImages
 import com.example.skillcinema.model.data.apiNew.ApiNewMovies
+import com.example.skillcinema.model.data.apiSeason.ApiSeason
 import com.example.skillcinema.model.data.apiSimilars.ApiSimilars
 import com.example.skillcinema.model.data.apiSingleMovie.ApiSingleMovie
 import com.example.skillcinema.model.data.apiSingleStaff.ApiSingleStaff
@@ -20,9 +21,11 @@ import com.example.skillcinema.ui.helpers.Helper
 import com.example.skillcinema.ui.adapters.all_movies.ItemPagingSource
 import com.example.skillcinema.ui.adapters.all_movies.PagingSource
 import com.example.skillcinema.ui.adapters.gallery_adapter.ImagePagingSource
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import retrofit2.http.Query
 import java.util.*
 import kotlin.random.Random
 
@@ -75,6 +78,12 @@ class Repository(
 
     private val _lisSize = MutableLiveData<MutableList<String>>()
     val lisSize = _lisSize
+
+    private val _season = MutableLiveData<ApiSeason>()
+    val season = _season
+
+    private val _search = MutableLiveData<ApiFilms>()
+    val search = _search
 
     val popular = Pager(PagingConfig(pageSize = 1)) {
         PagingSource(serviceApi, false)
@@ -164,6 +173,50 @@ class Repository(
         )
     }
 
+    fun searchKeyWord(name: String) {
+        compositeDisposable.add(
+            serviceApi.searchKeyWord(name).subscribe({
+                _search.value = it
+            }, {})
+        )
+    }
+
+    fun search(
+        order: String,
+        countries: Int,
+        genres: Int,
+        type: String,
+        page: Int,
+        ratingFrom: Int,
+        ratingTo: Int,
+        yearFrom: Int,
+        yearTo: Int,
+        imdbId: Int,
+        keyword: String,
+    ) {
+        _state.value = State.Loading
+        compositeDisposable.add(
+            serviceApi.search(
+                order,
+                countries,
+                genres,
+                type,
+                page,
+                ratingFrom,
+                ratingTo,
+                yearFrom,
+                yearTo,
+                imdbId,
+                keyword
+            ).subscribe({
+                _state.value = State.Success
+                _search.value = it
+            }, {
+                _state.value = State.ServerError(it.message ?: "")
+            })
+        )
+    }
+
 
     fun getSingleStaff(id: Int) {
         compositeDisposable.add(
@@ -179,6 +232,18 @@ class Repository(
                 _similar.value = it
             }, {})
         )
+    }
+
+    fun getSeason(id: Int) {
+        _state.value = State.Loading
+        compositeDisposable.add(serviceApi.getSingleSeason(id).subscribe({
+            _state.value = State.Success
+
+            _season.value = it
+
+        }, {
+            _state.value = State.ServerError(it.message ?: "")
+        }))
     }
 
     suspend fun getImagesStill(id: Int, isAll: Boolean) {

@@ -8,11 +8,13 @@ import com.example.skillcinema.model.data.apiFilms.ApiFilms
 import com.example.skillcinema.model.data.apiFilter.ApiFilter
 import com.example.skillcinema.model.data.apiImages.ApiImages
 import com.example.skillcinema.model.data.apiNew.ApiNewMovies
+import com.example.skillcinema.model.data.apiSeason.ApiSeason
 import com.example.skillcinema.model.data.apiSimilars.ApiSimilars
 import com.example.skillcinema.model.data.apiSingleMovie.ApiSingleMovie
 import com.example.skillcinema.model.data.apiSingleStaff.ApiSingleStaff
 import com.example.skillcinema.model.data.apiStaff.ApiStaff
 import com.example.skillcinema.model.data.apiTop.ApiTop
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import retrofit2.Response
 import retrofit2.http.*
@@ -70,6 +72,11 @@ interface Api {
         @Path("id") id: Int,
     ): Single<ApiSingleStaff>
 
+    @GET("/api/v2.2/films/{id}/seasons")
+    fun getSingleSeason(
+        @Path("id") id: Int,
+    ): Single<ApiSeason>
+
     @GET("/api/v2.2/films/{id}/images")
     suspend fun getImages(
         @Path("id") id: Int,
@@ -98,5 +105,25 @@ interface Api {
         @Query("type") type: String = TV_SERIES,
         @Query("page") page: Int = 1,
     ): Response<ApiFilms>
+
+    @GET("/api/v2.2/films")
+    fun search(
+        @Query("order") order: String,
+        @Query("countries") countries: Int,
+        @Query("genres") genres: Int,
+        @Query("type") type: String,
+        @Query("page") page: Int,
+        @Query("ratingFrom") ratingFrom: Int,
+        @Query("ratingTo") ratingTo: Int,
+        @Query("yearFrom") yearFrom: Int,
+        @Query("yearTo") yearTo: Int,
+        @Query("imdbId") imdbId: Int,
+        @Query("keyword") keyword: String,
+    ): Observable<ApiFilms>
+
+    @GET("/api/v2.2/films")
+    fun searchKeyWord(
+        @Query("keyword") keyword: String,
+    ): Observable<ApiFilms>
 
 }

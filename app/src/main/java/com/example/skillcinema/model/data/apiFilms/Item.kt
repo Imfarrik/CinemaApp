@@ -5,13 +5,13 @@ data class Item(
     val genres: List<Genre>,
     val imdbId: String,
     val kinopoiskId: Int,
-    val nameEn: Any,
+    val nameEn: String?,
     val nameOriginal: String,
-    val nameRu: String,
+    val nameRu: String?,
     val posterUrl: String,
     val posterUrlPreview: String,
     val ratingImdb: Double,
     val ratingKinopoisk: Double,
     val type: String,
-    val year: Int
+    val year: Int,
 )

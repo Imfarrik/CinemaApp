@@ -4,12 +4,14 @@ import com.example.skillcinema.model.data.apiFilms.ApiFilms
 import com.example.skillcinema.model.data.apiFilter.ApiFilter
 import com.example.skillcinema.model.data.apiImages.ApiImages
 import com.example.skillcinema.model.data.apiNew.ApiNewMovies
+import com.example.skillcinema.model.data.apiSeason.ApiSeason
 import com.example.skillcinema.model.data.apiSimilars.ApiSimilars
 import com.example.skillcinema.model.data.apiSingleMovie.ApiSingleMovie
 import com.example.skillcinema.model.data.apiSingleStaff.ApiSingleStaff
 import com.example.skillcinema.model.data.apiStaff.ApiStaff
 import com.example.skillcinema.model.data.apiTop.ApiTop
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import retrofit2.Response
@@ -85,6 +87,44 @@ class ApiImpl(private val api: Api) : ServiceApi {
 
     override fun getSingleStaff(id: Int): Single<ApiSingleStaff> {
         return api.getSingleStaff(id).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    override fun getSingleSeason(id: Int): Single<ApiSeason> {
+        return api.getSingleSeason(id).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    override fun search(
+        order: String,
+        countries: Int,
+        genres: Int,
+        type: String,
+        page: Int,
+        ratingFrom: Int,
+        ratingTo: Int,
+        yearFrom: Int,
+        yearTo: Int,
+        imdbId: Int,
+        keyword: String,
+    ): Observable<ApiFilms> {
+        return api.search(
+            order,
+            countries,
+            genres,
+            type,
+            page,
+            ratingFrom,
+            ratingTo,
+            yearFrom,
+            yearTo,
+            imdbId,
+            keyword
+        ).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+    }
+
+    override fun searchKeyWord(keyword: String): Observable<ApiFilms> {
+        return api.searchKeyWord(keyword).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
 

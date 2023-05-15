@@ -134,7 +134,7 @@
                     tools:ignore="NotSibling">
 
                     <TextView
-                        android:id="@+id/count_new"
+                        android:id="@+id/btn_filmography"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"

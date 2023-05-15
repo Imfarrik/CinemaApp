@@ -7,6 +7,8 @@ import com.example.skillcinema.ui.pages.all_movies_page.AllMoviesViewModel
 import com.example.skillcinema.ui.pages.filmography_page.FilmographyViewModel
 import com.example.skillcinema.ui.pages.gallery_page.GalleryViewModel
 import com.example.skillcinema.ui.pages.on_boarding_page.OnBoardingFragment
+import com.example.skillcinema.ui.pages.search_page.SearchViewModel
+import com.example.skillcinema.ui.pages.seasons_page.SeasonsViewModel
 import com.example.skillcinema.ui.pages.single_image_page.SingleImageViewModel
 import com.example.skillcinema.ui.pages.single_movie_page.SingleMovieViewModel
 import dagger.Component
@@ -23,5 +25,7 @@ interface AppComponent {
     fun inject(viewModel: GalleryViewModel)
     fun inject(viewModel: SingleImageViewModel)
     fun inject(viewModel: FilmographyViewModel)
+    fun inject(viewModel: SeasonsViewModel)
+    fun inject(viewModel: SearchViewModel)
 
 }

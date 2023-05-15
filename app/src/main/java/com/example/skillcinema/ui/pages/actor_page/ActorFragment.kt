@@ -45,20 +45,29 @@ class ActorFragment : Fragment() {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
 
-        viewModel.singleStaff.observe(viewLifecycleOwner) {
+
+
+        viewModel.singleStaff.observe(viewLifecycleOwner) { singleStaff ->
+
+            btnFilmography.setOnClickListener {
+                Navigator.actionActorFragmentToFilmographyFragment(findNavController(), singleStaff)
+            }
 
             Glide.with(requireContext())
-                .load(it.posterUrl)
+                .load(singleStaff.posterUrl)
                 .into(imageView)
 
-            actorName.text = it.nameRu ?: it.nameEn
-            typeNew.text = it.profession
+            actorName.text = singleStaff.nameRu ?: singleStaff.nameEn
+            typeNew.text = singleStaff.profession
 
             bestOfTheBest.apply {
                 count.text = "Все"
                 type.text = "Лучшее"
                 allBtn.setOnClickListener {
-
+                    Navigator.actionActorFragmentToAllMoviesFragment(
+                        findNavController(),
+                        singleStaff
+                    )
                 }
                 rv.apply {
                     layoutManager = LinearLayoutManager(
@@ -66,18 +75,22 @@ class ActorFragment : Fragment() {
                         LinearLayoutManager.HORIZONTAL,
                         false
                     )
-                    adapter = ActorFilmListAdapter(it.films, viewModel.repository, { movie_id ->
-                        Navigator.actionActorFragmentToSingleMovieFragment(
-                            findNavController(),
-                            movie_id
-                        )
-                    }, {
-
-                    })
+                    adapter =
+                        ActorFilmListAdapter(singleStaff.films, viewModel.repository, { movie_id ->
+                            Navigator.actionActorFragmentToSingleMovieFragment(
+                                findNavController(),
+                                movie_id
+                            )
+                        }, {
+                            Navigator.actionActorFragmentToAllMoviesFragment(
+                                findNavController(),
+                                singleStaff
+                            )
+                        })
                 }
             }
 
-            countTv.text = it.films.size.toString() + " фильма"
+            countTv.text = singleStaff.films.size.toString() + " фильма"
 
 
         }

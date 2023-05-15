@@ -14,11 +14,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.skillcinema.databinding.FragmentAllMoviesBinding
+import com.example.skillcinema.model.data.apiSingleStaff.ApiSingleStaff
 import com.example.skillcinema.model.repository.State
 import com.example.skillcinema.ui.helpers.Helper
 import com.example.skillcinema.ui.adapters.all_movies.RandomPagePagingAdapter
 import com.example.skillcinema.ui.adapters.all_movies.TopPagePagingAdapter
+import com.example.skillcinema.ui.adapters.filmography_page_adapter.MovieAdapter
 import com.example.skillcinema.ui.adapters.home_adapter.NewListAdapter
+import com.example.skillcinema.ui.helpers.Navigator
+import com.google.gson.Gson
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -30,7 +34,7 @@ class AllMoviesFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         vb = FragmentAllMoviesBinding.inflate(layoutInflater, container, false)
         return vb.root
@@ -47,12 +51,18 @@ class AllMoviesFragment : Fragment() {
 
     private fun initView() = with(vb) {
 
-        viewModel.getAllTypes(args.headerTitle)
-
         header.apply {
+            try {
+                if (args.headerTitle.toInt() in 0..4) {
 
-            viewModel.repository.title.observe(viewLifecycleOwner) { title ->
-                headerTitle.text = title
+                    viewModel.getAllTypes(args.headerTitle)
+
+                    viewModel.repository.title.observe(viewLifecycleOwner) { title ->
+                        headerTitle.text = title
+                    }
+                }
+            } catch (_: java.lang.Exception) {
+
             }
 
             btnBack.setOnClickListener {
@@ -61,6 +71,87 @@ class AllMoviesFragment : Fragment() {
 
         }
 
+
+        movieRv.apply {
+
+            layoutManager = GridLayoutManager(requireContext(), 3)
+
+            when (args.headerTitle) {
+                "0" -> {
+                    getAllTypes()
+                    viewModel.repository.newMovies.observe(viewLifecycleOwner) {
+                        adapter = NewListAdapter(it.items, true, {}, { film_id ->
+                            Navigator.actionAllMoviesFragmentToSingleMovieFragment(
+                                findNavController(),
+                                film_id
+                            )
+//                            findNavController().navigate(
+//                                AllMoviesFragmentDirections.actionAllMoviesFragmentToSingleMovieFragment(
+//                                    film_id
+//                                )
+//                            )
+                        })
+                    }
+                }
+                "1" -> {
+                    getAllTypes()
+                    val adapterPaging = TopPagePagingAdapter()
+                    adapter = adapterPaging
+                    lifecycleScope.launch {
+                        repeatOnLifecycle(Lifecycle.State.CREATED) {
+                            viewModel.popular.collectLatest(adapterPaging::submitData)
+                        }
+                    }
+                }
+                "2" -> {
+                    getAllTypes()
+                    val adapterPaging = RandomPagePagingAdapter()
+                    adapter = adapterPaging
+                    lifecycleScope.launch {
+                        repeatOnLifecycle(Lifecycle.State.CREATED) {
+                            viewModel.random.collectLatest(adapterPaging::submitData)
+                        }
+                    }
+                }
+                "3" -> {
+                    getAllTypes()
+                    val adapterPaging = TopPagePagingAdapter()
+                    adapter = adapterPaging
+                    lifecycleScope.launch {
+                        repeatOnLifecycle(Lifecycle.State.CREATED) {
+                            viewModel.top250.collectLatest(adapterPaging::submitData)
+                        }
+                    }
+                }
+                "4" -> {
+                    getAllTypes()
+                    val adapterPaging = RandomPagePagingAdapter()
+                    adapter = adapterPaging
+                    lifecycleScope.launch {
+                        repeatOnLifecycle(Lifecycle.State.CREATED) {
+                            viewModel.serials.collectLatest(adapterPaging::submitData)
+                        }
+                    }
+                }
+                else -> {
+                    val listOfMovies = Gson().fromJson(args.headerTitle, ApiSingleStaff::class.java)
+                    header.headerTitle.text = listOfMovies.nameRu ?: listOfMovies.nameEn
+                    adapter = MovieAdapter(viewModel.repository, listOfMovies.films) { film_id ->
+                        Navigator.actionAllMoviesFragmentToSingleMovieFragment(
+                            findNavController(),
+                            film_id
+                        )
+                    }
+                }
+            }
+
+
+        }
+
+
+    }
+
+    private fun getAllTypes() = with(vb) {
         viewModel.getAllTypes(args.headerTitle)
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -84,65 +175,6 @@ class AllMoviesFragment : Fragment() {
                 }
             }
         }
-
-        movieRv.apply {
-
-            layoutManager = GridLayoutManager(requireContext(), 3)
-
-            when (args.headerTitle.toInt()) {
-                0 -> {
-                    viewModel.repository.newMovies.observe(viewLifecycleOwner) {
-                        adapter = NewListAdapter(it.items, true, {}, { film_id ->
-                            findNavController().navigate(
-                                AllMoviesFragmentDirections.actionAllMoviesFragmentToSingleMovieFragment(
-                                    film_id
-                                )
-                            )
-                        })
-                    }
-                }
-                1 -> {
-                    val adapterPaging = TopPagePagingAdapter()
-                    adapter = adapterPaging
-                    lifecycleScope.launch {
-                        repeatOnLifecycle(Lifecycle.State.CREATED) {
-                            viewModel.popular.collectLatest(adapterPaging::submitData)
-                        }
-                    }
-                }
-                2 -> {
-                    val adapterPaging = RandomPagePagingAdapter()
-                    adapter = adapterPaging
-                    lifecycleScope.launch {
-                        repeatOnLifecycle(Lifecycle.State.CREATED) {
-                            viewModel.random.collectLatest(adapterPaging::submitData)
-                        }
-                    }
-                }
-                3 -> {
-                    val adapterPaging = TopPagePagingAdapter()
-                    adapter = adapterPaging
-                    lifecycleScope.launch {
-                        repeatOnLifecycle(Lifecycle.State.CREATED) {
-                            viewModel.top250.collectLatest(adapterPaging::submitData)
-                        }
-                    }
-                }
-                4 -> {
-                    val adapterPaging = RandomPagePagingAdapter()
-                    adapter = adapterPaging
-                    lifecycleScope.launch {
-                        repeatOnLifecycle(Lifecycle.State.CREATED) {
-                            viewModel.serials.collectLatest(adapterPaging::submitData)
-                        }
-                    }
-                }
-            }
-
-
-        }
-
-
     }
 
 

@@ -69,38 +69,31 @@ class HomeFragment : Fragment() {
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.repository.state.collect {
-                    when (it) {
-                        State.Loading -> {
-                            nestedScrollView.isVisible = false
-                            loader.isVisible = true
-                        }
-                        State.Success -> {
-                            loader.isVisible = false
-                            nestedScrollView.isVisible = true
-                            initRv(viewHolders)
-
-                            for (i in viewHolders.indices) {
-                                viewModel.insert(
-                                    MoviesHolder(
-                                        viewHolders[i].holderType.text as String,
-                                        i
-                                    )
-                                )
-                            }
-
-                        }
-                        is State.ServerError -> {
-                            Helper.setToast(requireContext(), it.message)
-                        }
-                        else -> {}
-                    }
-                }
-            }
+        viewModel.isLoading.observe(viewLifecycleOwner) {
+            nestedScrollView.isVisible = !it
+            loader.isVisible = it
         }
 
+        viewModel.isSuccess.observe(viewLifecycleOwner) {
+
+            loader.isVisible = !it
+            nestedScrollView.isVisible = it
+            initRv(viewHolders)
+
+            for (i in viewHolders.indices) {
+                viewModel.insert(
+                    MoviesHolder(
+                        viewHolders[i].holderType.text as String,
+                        i
+                    )
+                )
+            }
+
+        }
+
+        viewModel.onError.observe(viewLifecycleOwner) {
+            Helper.setToast(requireContext(), it)
+        }
 
     }
 

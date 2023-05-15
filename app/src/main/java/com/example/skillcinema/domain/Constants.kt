@@ -22,6 +22,10 @@ object Constants {
     const val COVER = "COVER"
     const val SCREENSHOT = "SCREENSHOT"
 
+    const val WRITER = "WRITER"
+    const val DIRECTOR = "DIRECTOR"
+    const val PRODUCER = "PRODUCER"
+    const val HIMSELF = "HIMSELF"
     const val ACTOR = "ACTOR"
 
     const val MAX_ITEMS = 20
