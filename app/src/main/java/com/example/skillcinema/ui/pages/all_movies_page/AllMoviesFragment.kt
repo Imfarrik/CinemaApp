@@ -16,11 +16,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.skillcinema.databinding.FragmentAllMoviesBinding
 import com.example.skillcinema.model.data.apiSingleStaff.ApiSingleStaff
 import com.example.skillcinema.model.repository.State
+import com.example.skillcinema.ui.adapters.all_movies.*
 import com.example.skillcinema.ui.helpers.Helper
-import com.example.skillcinema.ui.adapters.all_movies.RandomPagePagingAdapter
-import com.example.skillcinema.ui.adapters.all_movies.TopPagePagingAdapter
-import com.example.skillcinema.ui.adapters.filmography_page_adapter.MovieAdapter
-import com.example.skillcinema.ui.adapters.home_adapter.NewListAdapter
 import com.example.skillcinema.ui.helpers.Navigator
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.collectLatest
@@ -74,23 +71,18 @@ class AllMoviesFragment : Fragment() {
 
         movieRv.apply {
 
-            layoutManager = GridLayoutManager(requireContext(), 3)
+            layoutManager = GridLayoutManager(requireContext(), 2)
 
             when (args.headerTitle) {
                 "0" -> {
                     getAllTypes()
                     viewModel.repository.newMovies.observe(viewLifecycleOwner) {
-                        adapter = NewListAdapter(it.items, true, {}, { film_id ->
-                            Navigator.actionAllMoviesFragmentToSingleMovieFragment(
-                                findNavController(),
-                                film_id
-                            )
-//                            findNavController().navigate(
-//                                AllMoviesFragmentDirections.actionAllMoviesFragmentToSingleMovieFragment(
-//                                    film_id
-//                                )
-//                            )
-                        })
+                        adapter =
+                            NewListAdapter(viewModel.appDatabase, it.items, true, {}, { film_id ->
+                                Navigator.actionAllMoviesFragmentToSingleMovieFragment(
+                                    findNavController(), film_id
+                                )
+                            })
                     }
                 }
                 "1" -> {
@@ -133,13 +125,24 @@ class AllMoviesFragment : Fragment() {
                         }
                     }
                 }
+                "5" -> {
+                    viewModel.getWatched()
+                    header.headerTitle.text = "Просмотрено"
+                    viewModel.allWatched.observe(viewLifecycleOwner) {
+                        adapter = WatchedAdapter(it) { film_id ->
+                            Navigator.actionAllMoviesFragmentToSingleMovieFragment(
+                                findNavController(), film_id
+                            )
+                        }
+                    }
+
+                }
                 else -> {
                     val listOfMovies = Gson().fromJson(args.headerTitle, ApiSingleStaff::class.java)
                     header.headerTitle.text = listOfMovies.nameRu ?: listOfMovies.nameEn
                     adapter = MovieAdapter(viewModel.repository, listOfMovies.films) { film_id ->
                         Navigator.actionAllMoviesFragmentToSingleMovieFragment(
-                            findNavController(),
-                            film_id
+                            findNavController(), film_id
                         )
                     }
                 }

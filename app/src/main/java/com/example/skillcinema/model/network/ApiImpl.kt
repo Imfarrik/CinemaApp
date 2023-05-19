@@ -96,17 +96,17 @@ class ApiImpl(private val api: Api) : ServiceApi {
     }
 
     override fun search(
-        order: String,
-        countries: Int,
-        genres: Int,
-        type: String,
-        page: Int,
-        ratingFrom: Int,
-        ratingTo: Int,
-        yearFrom: Int,
-        yearTo: Int,
-        imdbId: Int,
-        keyword: String,
+        order: String?,
+        countries: Int?,
+        genres: Int?,
+        type: String?,
+        page: Int?,
+        ratingFrom: Int?,
+        ratingTo: Int?,
+        yearFrom: Int?,
+        yearTo: Int?,
+        imdbId: Int?,
+        keyword: String?,
     ): Observable<ApiFilms> {
         return api.search(
             order,
@@ -121,11 +121,6 @@ class ApiImpl(private val api: Api) : ServiceApi {
             imdbId,
             keyword
         ).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-    }
-
-    override fun searchKeyWord(keyword: String): Observable<ApiFilms> {
-        return api.searchKeyWord(keyword).subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
     }
 
 }

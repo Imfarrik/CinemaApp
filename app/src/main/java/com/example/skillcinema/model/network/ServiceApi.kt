@@ -70,20 +70,17 @@ interface ServiceApi {
     fun getSingleSeason(id: Int): Single<ApiSeason>
 
     fun search(
-        order: String,
-        countries: Int,
-        genres: Int,
-        type: String,
-        page: Int,
-        ratingFrom: Int,
-        ratingTo: Int,
-        yearFrom: Int,
-        yearTo: Int,
-        imdbId: Int,
-        keyword: String,
+        order: String?,
+        countries: Int?,
+        genres: Int?,
+        type: String?,
+        page: Int?,
+        ratingFrom: Int?,
+        ratingTo: Int?,
+        yearFrom: Int?,
+        yearTo: Int?,
+        imdbId: Int?,
+        keyword: String?,
     ): Observable<ApiFilms>
-
-    fun searchKeyWord(keyword: String): Observable<ApiFilms>
-
 
 }

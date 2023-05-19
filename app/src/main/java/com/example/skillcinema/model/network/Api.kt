@@ -108,22 +108,17 @@ interface Api {
 
     @GET("/api/v2.2/films")
     fun search(
-        @Query("order") order: String,
-        @Query("countries") countries: Int,
-        @Query("genres") genres: Int,
-        @Query("type") type: String,
-        @Query("page") page: Int,
-        @Query("ratingFrom") ratingFrom: Int,
-        @Query("ratingTo") ratingTo: Int,
-        @Query("yearFrom") yearFrom: Int,
-        @Query("yearTo") yearTo: Int,
-        @Query("imdbId") imdbId: Int,
-        @Query("keyword") keyword: String,
-    ): Observable<ApiFilms>
-
-    @GET("/api/v2.2/films")
-    fun searchKeyWord(
-        @Query("keyword") keyword: String,
+        @Query("order") order: String?,
+        @Query("countries") countries: Int?,
+        @Query("genres") genres: Int?,
+        @Query("type") type: String?,
+        @Query("page") page: Int?,
+        @Query("ratingFrom") ratingFrom: Int?,
+        @Query("ratingTo") ratingTo: Int?,
+        @Query("yearFrom") yearFrom: Int?,
+        @Query("yearTo") yearTo: Int?,
+        @Query("imdbId") imdbId: Int?,
+        @Query("keyword") keyword: String?,
     ): Observable<ApiFilms>
 
 }

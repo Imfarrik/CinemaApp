@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.skillcinema.databinding.ItemMoviesBinding
+import com.example.skillcinema.databinding.ItemMoviesGridBinding
 import com.example.skillcinema.model.data.apiFilms.Item
 import com.example.skillcinema.model.data.apiTop.Film
 
@@ -15,7 +16,7 @@ class RandomPagePagingAdapter :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TasksVH {
         val binding =
-            ItemMoviesBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemMoviesGridBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return TasksVH(binding)
     }
 
@@ -24,7 +25,7 @@ class RandomPagePagingAdapter :
         holder.initView(task)
     }
 
-    inner class TasksVH(private val binding: ItemMoviesBinding) :
+    inner class TasksVH(private val binding: ItemMoviesGridBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun initView(movie: Item?) = with(binding) {

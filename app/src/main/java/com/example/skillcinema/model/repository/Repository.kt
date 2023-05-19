@@ -6,6 +6,8 @@ import androidx.paging.PagingConfig
 import com.example.skillcinema.domain.Constants
 import com.example.skillcinema.domain.SharedPreferencesManager
 import com.example.skillcinema.model.data.apiFilms.ApiFilms
+import com.example.skillcinema.model.data.apiFilter.Country
+import com.example.skillcinema.model.data.apiFilter.Genre
 import com.example.skillcinema.model.data.apiImages.ApiImages
 import com.example.skillcinema.model.data.apiNew.ApiNewMovies
 import com.example.skillcinema.model.data.apiSeason.ApiSeason
@@ -21,11 +23,11 @@ import com.example.skillcinema.ui.helpers.Helper
 import com.example.skillcinema.ui.adapters.all_movies.ItemPagingSource
 import com.example.skillcinema.ui.adapters.all_movies.PagingSource
 import com.example.skillcinema.ui.adapters.gallery_adapter.ImagePagingSource
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import retrofit2.http.Query
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.*
 import kotlin.random.Random
 
@@ -84,6 +86,15 @@ class Repository(
 
     private val _search = MutableLiveData<ApiFilms>()
     val search = _search
+
+    private val _isEmptyList = MutableLiveData(true)
+    val isEmptyList = _isEmptyList
+
+    private val _allCountry = MutableLiveData<List<Country>>()
+    val allCountry = _allCountry
+
+    private val _allGenres = MutableLiveData<List<Genre>>()
+    val allGenres = _allGenres
 
     val popular = Pager(PagingConfig(pageSize = 1)) {
         PagingSource(serviceApi, false)
@@ -173,26 +184,45 @@ class Repository(
         )
     }
 
-    fun searchKeyWord(name: String) {
-        compositeDisposable.add(
-            serviceApi.searchKeyWord(name).subscribe({
-                _search.value = it
-            }, {})
-        )
+    fun searchByKeyGenre(key: String) {
+        val query = "%$key%"
+        runBlocking {
+            launch {
+                _allGenres.value = appDatabase.filterDao().getGenreByKeyWord(query)
+            }
+        }
+    }
+
+    fun searchByKeyCountry(key: String) {
+        val query = "%$key%"
+        runBlocking {
+            launch {
+                _allCountry.value = appDatabase.filterDao().getCountryByKeyWord(query)
+            }
+        }
+    }
+
+    fun getAllCountryAndGenres() {
+        runBlocking {
+            launch {
+                _allCountry.value = appDatabase.filterDao().getAllCountry()
+                _allGenres.value = appDatabase.filterDao().getAllGenre()
+            }
+        }
     }
 
     fun search(
-        order: String,
-        countries: Int,
-        genres: Int,
-        type: String,
+        order: String?,
+        countries: Int?,
+        genres: Int?,
+        type: String?,
         page: Int,
-        ratingFrom: Int,
-        ratingTo: Int,
-        yearFrom: Int,
-        yearTo: Int,
-        imdbId: Int,
-        keyword: String,
+        ratingFrom: Int?,
+        ratingTo: Int?,
+        yearFrom: Int?,
+        yearTo: Int?,
+        imdbId: Int?,
+        keyword: String?,
     ) {
         _state.value = State.Loading
         compositeDisposable.add(
@@ -210,6 +240,7 @@ class Repository(
                 keyword
             ).subscribe({
                 _state.value = State.Success
+                _isEmptyList.value = it.items.isEmpty()
                 _search.value = it
             }, {
                 _state.value = State.ServerError(it.message ?: "")
@@ -385,6 +416,13 @@ class Repository(
         compositeDisposable.add(
             serviceApi.getFilter().subscribe({
 
+                runBlocking {
+                    launch {
+                        appDatabase.filterDao().insertCountry(it.countries)
+                        appDatabase.filterDao().insertGenre(it.genres)
+                    }
+                }
+
                 val randomGenre = Random.nextInt(from = 0, until = it.genres.size)
                 val randomCountry = Random.nextInt(from = 0, until = it.countries.size)
 
@@ -399,14 +437,13 @@ class Repository(
                             sharedPreferencesManager.saveCountryId(it.countries[randomCountry].id)
                             sharedPreferencesManager.saveGenreId(it.genres[randomGenre].id)
 
-                            _randomName.value =
-                                "${
-                                    it.genres[randomGenre].genre.replaceFirstChar { latter ->
-                                        if (latter.isLowerCase()) latter.titlecase(
-                                            Locale.ROOT
-                                        ) else latter.toString()
-                                    }
-                                } ${it.countries[randomCountry].country}"
+                            _randomName.value = "${
+                                it.genres[randomGenre].genre.replaceFirstChar { latter ->
+                                    if (latter.isLowerCase()) latter.titlecase(
+                                        Locale.ROOT
+                                    ) else latter.toString()
+                                }
+                            } ${it.countries[randomCountry].country}"
 
                             _randomMovies.value = randomFilms
 
@@ -415,18 +452,16 @@ class Repository(
                             sharedPreferencesManager.saveGenreId(1)
                             compositeDisposable.add(
                                 serviceApi.getFilms(
-                                    1,
-                                    1
+                                    1, 1
                                 ).subscribe({ randomFilms2 ->
 
-                                    _randomName.value =
-                                        "${
-                                            it.genres[0].genre.replaceFirstChar { latter ->
-                                                if (latter.isLowerCase()) latter.titlecase(
-                                                    Locale.ROOT
-                                                ) else latter.toString()
-                                            }
-                                        } ${it.countries[0].country}"
+                                    _randomName.value = "${
+                                        it.genres[0].genre.replaceFirstChar { latter ->
+                                            if (latter.isLowerCase()) latter.titlecase(
+                                                Locale.ROOT
+                                            ) else latter.toString()
+                                        }
+                                    } ${it.countries[0].country}"
 
                                     _randomMovies.value = randomFilms2
 

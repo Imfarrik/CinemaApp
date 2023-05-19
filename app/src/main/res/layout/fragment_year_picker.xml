@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.pages.filter_page.YearPickerFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <include
+            android:id="@+id/header"
+            layout="@layout/page_header" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="26dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/graphik_regular"
+            android:text="Искать в период с"
+            android:textSize="14sp" />
+
+        <com.example.skillcinema.ui.custom_view.DatePickerYear
+            android:id="@+id/fromYearToYear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="26dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/graphik_regular"
+            android:text="Искать в период до"
+            android:textSize="14sp" />
+
+        <com.example.skillcinema.ui.custom_view.DatePickerYear
+            android:id="@+id/toYearToYear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/save_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:text="Выбрать"
+            android:textAllCaps="false"
+            app:backgroundTint="@color/main"
+            app:cornerRadius="20dp" />
+
+    </LinearLayout>
+
+
+</androidx.core.widget.NestedScrollView>

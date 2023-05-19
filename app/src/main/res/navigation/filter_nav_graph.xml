@@ -9,5 +9,26 @@
         android:id="@+id/filterFragment"
         android:name="com.example.skillcinema.ui.pages.filter_page.FilterFragment"
         android:label="fragment_filter"
-        tools:layout="@layout/fragment_filter" />
+        tools:layout="@layout/fragment_filter" >
+        <action
+            android:id="@+id/action_filterFragment_to_countryAndGenreFilterFragment"
+            app:destination="@id/countryAndGenreFilterFragment" />
+        <action
+            android:id="@+id/action_filterFragment_to_yearPickerFragment"
+            app:destination="@id/yearPickerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/countryAndGenreFilterFragment"
+        android:name="com.example.skillcinema.ui.pages.filter_page.CountryAndGenreFilterFragment"
+        android:label="fragment_country_and_genre_filter"
+        tools:layout="@layout/fragment_country_and_genre_filter" >
+        <argument
+            android:name="name"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/yearPickerFragment"
+        android:name="com.example.skillcinema.ui.pages.filter_page.YearPickerFragment"
+        android:label="fragment_year_picker"
+        tools:layout="@layout/fragment_year_picker" />
 </navigation>

@@ -6,14 +6,20 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.skillcinema.R
 import com.example.skillcinema.databinding.BtnAllMoviesBinding
 import com.example.skillcinema.databinding.ItemMoviesBinding
 import com.example.skillcinema.domain.Constants.ALL_ITEMS_VIEW_TYPE
 import com.example.skillcinema.domain.Constants.DEFAULT_VIEW_TYPE
 import com.example.skillcinema.domain.Constants.MAX_ITEMS
 import com.example.skillcinema.model.data.apiNew.Item
+import com.example.skillcinema.room.AppDatabase
+import com.example.skillcinema.ui.helpers.Helper
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class NewListAdapter(
+    private val appDatabase: AppDatabase,
     private val movies: List<Item>,
     private val isAllMovies: Boolean = false,
     private val allMoviesBtnListener: () -> Unit,
@@ -67,6 +73,21 @@ class NewListAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(movie: Item) = with(binding) {
+
+            runBlocking {
+                launch {
+                    val watched = appDatabase.collectionDao().getAllWatched()
+                    watched.forEach {
+                        if (it.movie_id == movie.kinopoiskId) {
+                            imageView.foreground = Helper.setBackground(
+                                itemView.context,
+                                R.drawable.gradient_item_movie
+                            )
+                            hasWatched.isVisible = true
+                        }
+                    }
+                }
+            }
 
             itemView.setOnClickListener {
                 singleMovieListener(movie.kinopoiskId)

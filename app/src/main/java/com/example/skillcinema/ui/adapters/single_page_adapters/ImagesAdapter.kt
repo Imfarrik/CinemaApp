@@ -1,5 +1,6 @@
 package com.example.skillcinema.ui.adapters.single_page_adapters
 
+import android.app.ActionBar.LayoutParams
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -33,7 +34,9 @@ class ImagesAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun initView(item: Item, pos: Int) = with(binding) {
-
+            val params = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+            container.setPadding(0, 0, 16, 0)
+            container.layoutParams = params
             Glide.with(itemView.context)
                 .load(item.previewUrl)
                 .into(imageView)

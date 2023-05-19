@@ -99,19 +99,21 @@ class HomeFragment : Fragment() {
 
     private fun initRv(viewHolders: List<MovieHolderBinding>) {
         viewModel.repository.newMovies.observe(viewLifecycleOwner) {
-            viewHolders[0].rvMovie.adapter = NewListAdapter(it.items, false, {
-                Navigator.actionHomeFragmentToAllMoviesFragment(findNavController(), "0")
-            }, { movie_id ->
-                Navigator.actionHomeFragmentToSingleMovieFragment(findNavController(), movie_id)
-            })
+            viewHolders[0].rvMovie.adapter =
+                NewListAdapter(viewModel.appDatabase, it.items, false, {
+                    Navigator.actionHomeFragmentToAllMoviesFragment(findNavController(), "0")
+                }, { movie_id ->
+                    Navigator.actionHomeFragmentToSingleMovieFragment(findNavController(), movie_id)
+                })
         }
 
         viewModel.repository.topMovies.observe(viewLifecycleOwner) {
-            viewHolders[1].rvMovie.adapter = TopListAdapter(it.films, { movie_id ->
-                Navigator.actionHomeFragmentToSingleMovieFragment(findNavController(), movie_id)
-            }, {
-                Navigator.actionHomeFragmentToAllMoviesFragment(findNavController(), "1")
-            })
+            viewHolders[1].rvMovie.adapter =
+                TopListAdapter(viewModel.appDatabase, it.films, { movie_id ->
+                    Navigator.actionHomeFragmentToSingleMovieFragment(findNavController(), movie_id)
+                }, {
+                    Navigator.actionHomeFragmentToAllMoviesFragment(findNavController(), "1")
+                })
         }
 
         viewModel.repository.randomName.observe(viewLifecycleOwner) {
@@ -119,31 +121,34 @@ class HomeFragment : Fragment() {
         }
 
         viewModel.repository.randomMovies.observe(viewLifecycleOwner) {
-            viewHolders[2].rvMovie.adapter = FilmListAdapter(it.items, { movie_id ->
-                Navigator.actionHomeFragmentToSingleMovieFragment(findNavController(), movie_id)
-            }, {
-                Navigator.actionHomeFragmentToAllMoviesFragment(findNavController(), "2")
-            })
+            viewHolders[2].rvMovie.adapter =
+                FilmListAdapter(viewModel.appDatabase, it.items, { movie_id ->
+                    Navigator.actionHomeFragmentToSingleMovieFragment(findNavController(), movie_id)
+                }, {
+                    Navigator.actionHomeFragmentToAllMoviesFragment(findNavController(), "2")
+                })
             viewModel.insert(MoviesHolder(viewHolders[2].holderType.text as String, 2))
         }
 
         viewModel.repository.top250Movies.observe(viewLifecycleOwner) {
-            viewHolders[3].rvMovie.adapter = TopListAdapter(it.films, { movie_id ->
-                Navigator.actionHomeFragmentToSingleMovieFragment(
-                    findNavController(),
-                    movie_id
-                )
-            }, {
-                Navigator.actionHomeFragmentToAllMoviesFragment(findNavController(), "3")
-            })
+            viewHolders[3].rvMovie.adapter =
+                TopListAdapter(viewModel.appDatabase, it.films, { movie_id ->
+                    Navigator.actionHomeFragmentToSingleMovieFragment(
+                        findNavController(),
+                        movie_id
+                    )
+                }, {
+                    Navigator.actionHomeFragmentToAllMoviesFragment(findNavController(), "3")
+                })
         }
 
         viewModel.repository.topSeries.observe(viewLifecycleOwner) {
-            viewHolders[4].rvMovie.adapter = FilmListAdapter(it.items, { movie_id ->
-                Navigator.actionHomeFragmentToSingleMovieFragment(findNavController(), movie_id)
-            }, {
-                Navigator.actionHomeFragmentToAllMoviesFragment(findNavController(), "4")
-            })
+            viewHolders[4].rvMovie.adapter =
+                FilmListAdapter(viewModel.appDatabase, it.items, { movie_id ->
+                    Navigator.actionHomeFragmentToSingleMovieFragment(findNavController(), movie_id)
+                }, {
+                    Navigator.actionHomeFragmentToAllMoviesFragment(findNavController(), "4")
+                })
         }
     }
 

@@ -3,11 +3,14 @@ package com.example.skillcinema.ui.pages.search_page
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.skillcinema.databinding.FragmentSearchBinding
 import com.example.skillcinema.domain.Constants
@@ -34,6 +37,7 @@ class SearchFragment : Fragment() {
         Helper.insets(vb.root)
 
         initView()
+
     }
 
     private fun initView() = with(vb) {
@@ -42,25 +46,26 @@ class SearchFragment : Fragment() {
             Navigator.startFilterActivity(requireContext())
         }
 
-        editQuery.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        editQuery.addTextChangedListener(viewModel.textChangeListener)
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-            override fun afterTextChanged(s: Editable?) {
-                val query = s.toString().trim()
-
-                viewModel.searchByKeyWord(query)
-
-
-            }
-        })
+        viewModel.isEmptyList.observe(viewLifecycleOwner) {
+            isEmptyTv.isVisible = it
+            resultRv.isVisible = !it
+        }
 
         viewModel.result.observe(viewLifecycleOwner) {
             resultRv.layoutManager = GridLayoutManager(requireContext(), 3)
-            resultRv.adapter = SearchAdapter(it.items)
+            resultRv.adapter = SearchAdapter(it.items) { id ->
+                Navigator.actionSearchFragmentToSingleMovieFragment(findNavController(), id)
+            }
         }
 
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.search()
     }
 
 

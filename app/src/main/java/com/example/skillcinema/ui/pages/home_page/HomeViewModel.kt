@@ -9,6 +9,7 @@ import com.example.skillcinema.domain.SharedPreferencesManager
 import com.example.skillcinema.model.data.db.MoviesHolder
 import com.example.skillcinema.model.repository.Repository
 import com.example.skillcinema.model.repository.State
+import com.example.skillcinema.room.AppDatabase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,6 +20,9 @@ class HomeViewModel : ViewModel() {
 
     @Inject
     lateinit var repository: Repository
+
+    @Inject
+    lateinit var appDatabase: AppDatabase
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading = _isLoading

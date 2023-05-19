@@ -5,8 +5,10 @@ import com.example.skillcinema.ui.pages.actor_page.ActorViewModel
 import com.example.skillcinema.ui.pages.home_page.HomeViewModel
 import com.example.skillcinema.ui.pages.all_movies_page.AllMoviesViewModel
 import com.example.skillcinema.ui.pages.filmography_page.FilmographyViewModel
+import com.example.skillcinema.ui.pages.filter_page.FilterViewModel
 import com.example.skillcinema.ui.pages.gallery_page.GalleryViewModel
 import com.example.skillcinema.ui.pages.on_boarding_page.OnBoardingFragment
+import com.example.skillcinema.ui.pages.profile_page.ProfileViewModel
 import com.example.skillcinema.ui.pages.search_page.SearchViewModel
 import com.example.skillcinema.ui.pages.seasons_page.SeasonsViewModel
 import com.example.skillcinema.ui.pages.single_image_page.SingleImageViewModel
@@ -27,5 +29,7 @@ interface AppComponent {
     fun inject(viewModel: FilmographyViewModel)
     fun inject(viewModel: SeasonsViewModel)
     fun inject(viewModel: SearchViewModel)
+    fun inject(viewModel: FilterViewModel)
+    fun inject(viewModel: ProfileViewModel)
 
 }

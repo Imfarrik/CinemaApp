@@ -98,6 +98,43 @@
                         android:textColor="#B5B5C9"
                         android:textSize="12sp" />
 
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="17dp">
+
+                        <ImageView
+                            android:id="@+id/like"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/like" />
+
+                        <ImageView
+                            android:id="@+id/save"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/save" />
+
+                        <ImageView
+                            android:id="@+id/watch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/whatch" />
+
+                        <ImageView
+                            android:id="@+id/share"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/share" />
+
+                        <ImageView
+                            android:id="@+id/resource_else"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/resource_else" />
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
 

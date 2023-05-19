@@ -11,9 +11,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.skillcinema.databinding.FragmentFilmographyBinding
-import com.example.skillcinema.domain.Constants
 import com.example.skillcinema.model.data.apiSingleStaff.ApiSingleStaff
-import com.example.skillcinema.model.data.apiSingleStaff.Film
 import com.example.skillcinema.ui.adapters.filmography_page_adapter.MovieAdapter
 import com.example.skillcinema.ui.adapters.filmography_page_adapter.TypeAdapter
 import com.example.skillcinema.ui.helpers.Helper
@@ -58,7 +56,7 @@ class FilmographyFragment : Fragment() {
         typeRv.adapter = TypeAdapter(arg) {
 
             movieRv.layoutManager =
-                GridLayoutManager(requireContext(), 3)
+                GridLayoutManager(requireContext(), 2)
             movieRv.adapter = MovieAdapter(viewModel.repository, it) { id ->
                 Navigator.actionFilmographyFragmentToSingleMovieFragment(findNavController(), id)
             }

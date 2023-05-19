@@ -2,8 +2,7 @@ package com.example.skillcinema.ui.helpers
 
 import android.content.Context
 import android.content.Intent
-import androidx.core.app.ActivityCompat
-import androidx.fragment.app.FragmentActivity
+import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import com.example.skillcinema.R
@@ -13,15 +12,29 @@ import com.example.skillcinema.ui.pages.actor_page.ActorFragmentDirections
 import com.example.skillcinema.ui.pages.all_movies_page.AllMoviesFragmentDirections
 import com.example.skillcinema.ui.pages.filmography_page.FilmographyFragmentDirections
 import com.example.skillcinema.ui.pages.filter_page.FilterActivity
+import com.example.skillcinema.ui.pages.filter_page.FilterFragmentDirections
 import com.example.skillcinema.ui.pages.home_page.HomeFragmentDirections
 import com.example.skillcinema.ui.pages.home_page.HomePageActivity
 import com.example.skillcinema.ui.pages.on_boarding_page.OnBoardingActivity
+import com.example.skillcinema.ui.pages.profile_page.ProfileFragmentDirections
+import com.example.skillcinema.ui.pages.search_page.SearchFragmentDirections
 import com.example.skillcinema.ui.pages.single_image_page.SingleImageActivity
 import com.example.skillcinema.ui.pages.single_movie_page.SingleMovieFragmentDirections
 import com.google.gson.Gson
 
 
 object Navigator {
+
+    fun shareAction(context: Context, name: String) {
+        val shareText = "Check out this movie: $name"
+
+        val sendIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, shareText)
+            type = "text/plain"
+        }
+        context.startActivity(Intent.createChooser(sendIntent, "Share movie via"))
+    }
 
     private fun navOptions(): NavOptions {
         return NavOptions.Builder()
@@ -151,6 +164,15 @@ object Navigator {
         }
     }
 
+    fun actionSearchFragmentToSingleMovieFragment(navController: NavController, id: Int) {
+        if (navController.currentDestination?.id == R.id.searchFragment) {
+            navController.navigate(
+                SearchFragmentDirections.actionSearchFragmentToSingleMovieFragment(id),
+                navOptions()
+            )
+        }
+    }
+
     fun actionActorFragmentToAllMoviesFragment(
         navController: NavController,
         data: ApiSingleStaff,
@@ -161,6 +183,51 @@ object Navigator {
         if (navController.currentDestination?.id == R.id.actorFragment) {
             navController.navigate(
                 ActorFragmentDirections.actionActorFragmentToAllMoviesFragment(listOfMovies),
+                navOptions()
+            )
+        }
+    }
+
+    fun actionFilterFragmentToCountryAndGenreFilterFragment(
+        navController: NavController,
+        name: String,
+    ) {
+        if (navController.currentDestination?.id == R.id.filterFragment) {
+            navController.navigate(
+                FilterFragmentDirections.actionFilterFragmentToCountryAndGenreFilterFragment(
+                    name
+                ), navOptions()
+            )
+        }
+    }
+
+    fun actionFilterFragmentToYearPickerFragment(navController: NavController) {
+        if (navController.currentDestination?.id == R.id.filterFragment) {
+            navController.navigate(
+                FilterFragmentDirections.actionFilterFragmentToYearPickerFragment(),
+                navOptions()
+            )
+        }
+    }
+
+    fun actionProfileFragmentToSingleMovieFragment(navController: NavController, id: Int) {
+        if (navController.currentDestination?.id == R.id.profileFragment) {
+            navController.navigate(
+                ProfileFragmentDirections.actionProfileFragmentToSingleMovieFragment(id),
+                navOptions()
+            )
+        }
+    }
+
+    fun actionProfileFragmentToAllMoviesCollectionFragment(
+        navController: NavController,
+        headerTitle: String,
+    ) {
+        if (navController.currentDestination?.id == R.id.profileFragment) {
+            navController.navigate(
+                ProfileFragmentDirections.actionProfileFragmentToAllMoviesCollectionFragment(
+                    headerTitle
+                ),
                 navOptions()
             )
         }

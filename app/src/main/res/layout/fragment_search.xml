@@ -63,6 +63,19 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <TextView
+        android:id="@+id/is_empty_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_gravity="center"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:fontFamily="@font/graphik_regular"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:text="К сожалению, по вашему запросу \nничего не найдено" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/result_rv"
@@ -71,8 +84,7 @@
         android:layout_marginHorizontal="26dp"
         android:layout_marginTop="40dp"
         android:orientation="vertical"
-        android:overScrollMode="never"
-        android:paddingBottom="110dp" />
+        android:overScrollMode="never"/>
 
 
 </LinearLayout>

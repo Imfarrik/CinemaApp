@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.example.skillcinema.R
 import com.example.skillcinema.databinding.ItemGalleryBinding
 import com.example.skillcinema.databinding.ItemMoviesBinding
+import com.example.skillcinema.databinding.ItemMoviesGridBinding
 import com.example.skillcinema.databinding.ItemTypeBinding
 import com.example.skillcinema.domain.Constants
 import com.example.skillcinema.model.data.apiImages.Item
@@ -29,7 +30,7 @@ class MovieAdapter(
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TypeVH {
-        val binding = ItemMoviesBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemMoviesGridBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return TypeVH(binding)
     }
 
@@ -44,7 +45,7 @@ class MovieAdapter(
         return movies.size
     }
 
-    inner class TypeVH(private val binding: ItemMoviesBinding) :
+    inner class TypeVH(private val binding: ItemMoviesGridBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun initView(item: Film, pos: Int) = with(binding) {

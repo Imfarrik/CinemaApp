@@ -9,8 +9,14 @@ object Constants {
     const val TOP_100_POPULAR_FILMS = "TOP_100_POPULAR_FILMS"
     const val TOP_250_BEST_FILMS = "TOP_250_BEST_FILMS"
     const val RATING = "RATING"
+    const val NUM_VOTE = "NUM_VOTE"
+    const val YEAR = "YEAR"
     const val FILM = "FILM"
     const val TV_SERIES = "TV_SERIES"
+    const val ALL = "ALL"
+
+    const val COUNTRY = "Страна"
+    const val GENRE = "Жанр"
 
     const val STILL = "STILL"
     const val SHOOTING = "SHOOTING"

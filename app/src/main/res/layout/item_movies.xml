@@ -4,7 +4,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:paddingEnd="10dp">
 
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
@@ -48,6 +48,13 @@
 
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/has_watched"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:src="@drawable/watched_for_item"
+            android:visibility="gone" />
 
     </androidx.cardview.widget.CardView>
 
@@ -57,8 +64,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/graphik_regular"
-        android:text="Name"
         android:maxLines="2"
+        android:text="Name"
         android:textColor="#272727"
         android:textSize="14sp"
         app:layout_constraintTop_toBottomOf="parent" />
