@@ -8,8 +8,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import com.example.skillcinema.App
 import com.example.skillcinema.domain.SharedPreferencesManager
-import com.example.skillcinema.model.data.db.WasInterestedHolder
-import com.example.skillcinema.model.data.db.WatchedHolder
+import com.example.skillcinema.model.data.db.*
 import com.example.skillcinema.model.network.ServiceApi
 import com.example.skillcinema.model.repository.Repository
 import com.example.skillcinema.room.AppDatabase
@@ -38,6 +37,15 @@ class AllMoviesViewModel : ViewModel() {
     private val _allInterested = MutableLiveData<List<WasInterestedHolder>>()
     val allInterested = _allInterested
 
+    private val _allMoviesInCollection = MutableLiveData<List<MoviesInCollection>>()
+    val allMoviesInCollection = _allMoviesInCollection
+
+    private val _allSaved = MutableLiveData<List<SaveHolder>>()
+    val allSaved = _allSaved
+
+    private val _allLiked = MutableLiveData<List<LikeHolder>>()
+    val allLiked = _allLiked
+
     init {
         App.getAppComponent().inject(this)
     }
@@ -48,6 +56,28 @@ class AllMoviesViewModel : ViewModel() {
     val top250 = repository.top250.flow.cachedIn(viewModelScope)
     val random = repository.random.flow.cachedIn(viewModelScope)
     val serials = repository.serials.flow.cachedIn(viewModelScope)
+
+    fun getAllMoviesInCollection(type: String) {
+        viewModelScope.launch {
+            _allMoviesInCollection.value = appDatabase.collectionDao().getMovieInCollection(type)
+        }
+    }
+
+    fun getLiked() {
+        viewModelScope.launch {
+            launch {
+                _allLiked.value = appDatabase.collectionDao().getAllLike()
+            }
+        }
+    }
+
+    fun getSaved() {
+        viewModelScope.launch {
+            launch {
+                _allSaved.value = appDatabase.collectionDao().getAllSavedMovie()
+            }
+        }
+    }
 
     fun getWatched() {
         viewModelScope.launch {

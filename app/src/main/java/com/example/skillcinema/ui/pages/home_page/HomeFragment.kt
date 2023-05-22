@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -21,6 +22,7 @@ import com.example.skillcinema.ui.helpers.Navigator
 import com.example.skillcinema.ui.adapters.home_adapter.FilmListAdapter
 import com.example.skillcinema.ui.adapters.home_adapter.NewListAdapter
 import com.example.skillcinema.ui.adapters.home_adapter.TopListAdapter
+import com.example.skillcinema.ui.custom_view.BottomSheetError
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
@@ -92,7 +94,11 @@ class HomeFragment : Fragment() {
         }
 
         viewModel.onError.observe(viewLifecycleOwner) {
-            Helper.setToast(requireContext(), it)
+            if (it) {
+                val bottomSheet = BottomSheetError()
+                val fragmentManager = (activity as FragmentActivity).supportFragmentManager
+                fragmentManager.let { bottomSheet.show(it, BottomSheetError.TAG) }
+            }
         }
 
     }

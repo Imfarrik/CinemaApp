@@ -15,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -36,6 +37,7 @@ import com.example.skillcinema.ui.adapters.bottom_sheet_adapter.CollectionAdapte
 import com.example.skillcinema.ui.adapters.single_page_adapters.ImagesAdapter
 import com.example.skillcinema.ui.adapters.single_page_adapters.SimilarListAdapter
 import com.example.skillcinema.ui.adapters.single_page_adapters.StaffAdapter
+import com.example.skillcinema.ui.custom_view.BottomSheetError
 import com.example.skillcinema.ui.helpers.Helper
 import com.example.skillcinema.ui.helpers.Navigator
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -77,6 +79,25 @@ class SingleMovieFragment : Fragment() {
         }
 
         initView()
+
+        viewModel.isSuccess.observe(viewLifecycleOwner) {
+            vb.loader.isVisible = !it
+            vb.scrollView.isVisible = it
+        }
+
+        viewModel.isLoading.observe(viewLifecycleOwner) {
+            vb.loader.isVisible = it
+            vb.scrollView.isVisible = !it
+        }
+
+        viewModel.onError.observe(viewLifecycleOwner) { error ->
+            if (error) {
+                val bottomSheet = BottomSheetError()
+                val fragmentManager = (activity as FragmentActivity).supportFragmentManager
+                fragmentManager.let { bottomSheet.show(it, BottomSheetError.TAG) }
+            }
+        }
+
     }
 
     private fun initDB(apiSingleMovie: ApiSingleMovie) = with(vb) {
@@ -351,12 +372,17 @@ class SingleMovieFragment : Fragment() {
         }
 
         viewModel.similar.observe(viewLifecycleOwner) {
-            sameMovies.apply {
-                type.text = "Похожие фильмы"
-                count.text = it.items.size.toString()
-                rv.layoutManager =
-                    LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-                rv.adapter = SimilarListAdapter(it.items)
+            if (it.items.isNotEmpty()) {
+                sameMoviesContainer.isVisible = true
+                sameMovies.apply {
+                    type.text = "Похожие фильмы"
+                    count.text = it.items.size.toString()
+                    rv.layoutManager =
+                        LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+                    rv.adapter = SimilarListAdapter(it.items)
+                }
+            } else {
+                sameMoviesContainer.isVisible = false
             }
         }
 

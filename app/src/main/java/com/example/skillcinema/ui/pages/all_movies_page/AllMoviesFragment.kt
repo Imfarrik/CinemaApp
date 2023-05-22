@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -17,6 +18,7 @@ import com.example.skillcinema.databinding.FragmentAllMoviesBinding
 import com.example.skillcinema.model.data.apiSingleStaff.ApiSingleStaff
 import com.example.skillcinema.model.repository.State
 import com.example.skillcinema.ui.adapters.all_movies.*
+import com.example.skillcinema.ui.custom_view.BottomSheetError
 import com.example.skillcinema.ui.helpers.Helper
 import com.example.skillcinema.ui.helpers.Navigator
 import com.google.gson.Gson
@@ -159,9 +161,9 @@ class AllMoviesFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.state.collect {
-                    if (it != null) {
-                        when (it) {
+                viewModel.state.collect { state ->
+                    if (state != null) {
+                        when (state) {
                             State.Success -> {
                                 loader.isVisible = false
                                 mainContainer.isVisible = true
@@ -170,8 +172,11 @@ class AllMoviesFragment : Fragment() {
                                 mainContainer.isVisible = false
                                 loader.isVisible = true
                             }
-                            is State.ServerError -> {
-                                Helper.setToast(requireContext(), it.message)
+                            is State.Error -> {
+                                val bottomSheet = BottomSheetError()
+                                val fragmentManager =
+                                    (activity as FragmentActivity).supportFragmentManager
+                                fragmentManager.let { bottomSheet.show(it, BottomSheetError.TAG) }
                             }
                         }
                     }

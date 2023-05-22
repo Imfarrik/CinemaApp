@@ -1,32 +1,18 @@
 package com.example.skillcinema.ui.adapters.all_movies
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
-import android.view.View.OnClickListener
 import android.view.ViewGroup
-import android.view.WindowId
-import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.skillcinema.R
-import com.example.skillcinema.databinding.ItemGalleryBinding
-import com.example.skillcinema.databinding.ItemMoviesBinding
 import com.example.skillcinema.databinding.ItemMoviesGridBinding
-import com.example.skillcinema.databinding.ItemTypeBinding
-import com.example.skillcinema.domain.Constants
-import com.example.skillcinema.model.data.apiImages.Item
-import com.example.skillcinema.model.data.apiSingleStaff.ApiSingleStaff
-import com.example.skillcinema.model.data.apiSingleStaff.Film
-import com.example.skillcinema.model.data.db.WatchedHolder
-import com.example.skillcinema.model.repository.Repository
+import com.example.skillcinema.model.data.db.MoviesInCollection
+import com.example.skillcinema.model.data.db.SaveHolder
 
-class WatchedAdapter(
-    private val movies: List<WatchedHolder>,
+class SavedMoviesAdapter(
+    private val movies: List<SaveHolder>,
     private val clickListener: (id: Int) -> Unit,
 ) :
-    RecyclerView.Adapter<WatchedAdapter.TypeVH>() {
+    RecyclerView.Adapter<SavedMoviesAdapter.TypeVH>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TypeVH {
@@ -49,7 +35,7 @@ class WatchedAdapter(
     inner class TypeVH(private val binding: ItemMoviesGridBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun initView(item: WatchedHolder) = with(binding) {
+        fun initView(item: SaveHolder) = with(binding) {
 
             itemView.setOnClickListener {
                 clickListener(item.movie_id)

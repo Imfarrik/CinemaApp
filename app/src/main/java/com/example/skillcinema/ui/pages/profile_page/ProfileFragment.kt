@@ -81,8 +81,11 @@ class ProfileFragment : Fragment() {
 
         rvCollections.layoutManager = GridLayoutManager(requireContext(), 2)
         viewModel.allCollection.observe(viewLifecycleOwner) {
-            rvCollections.adapter = CollectionAdapter(viewModel.appDatabase, it) {
-
+            rvCollections.adapter = CollectionAdapter(viewModel.appDatabase, it) { type ->
+                Navigator.actionProfileFragmentToAllMoviesCollectionFragment(
+                    findNavController(),
+                    type
+                )
             }
         }
         btnNewCollection.setOnClickListener {

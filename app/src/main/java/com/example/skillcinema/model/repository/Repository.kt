@@ -19,10 +19,10 @@ import com.example.skillcinema.model.data.apiTop.ApiTop
 import com.example.skillcinema.model.data.db.MoviesHolder
 import com.example.skillcinema.model.network.ServiceApi
 import com.example.skillcinema.room.AppDatabase
-import com.example.skillcinema.ui.helpers.Helper
 import com.example.skillcinema.ui.adapters.all_movies.ItemPagingSource
 import com.example.skillcinema.ui.adapters.all_movies.PagingSource
 import com.example.skillcinema.ui.adapters.gallery_adapter.ImagePagingSource
+import com.example.skillcinema.ui.helpers.Helper
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -243,7 +243,7 @@ class Repository(
                 _isEmptyList.value = it.items.isEmpty()
                 _search.value = it
             }, {
-                _state.value = State.ServerError(it.message ?: "")
+                _state.value = State.Error
             })
         )
     }
@@ -268,12 +268,11 @@ class Repository(
     fun getSeason(id: Int) {
         _state.value = State.Loading
         compositeDisposable.add(serviceApi.getSingleSeason(id).subscribe({
-            _state.value = State.Success
 
             _season.value = it
 
         }, {
-            _state.value = State.ServerError(it.message ?: "")
+            _state.value = State.Error
         }))
     }
 
@@ -329,9 +328,13 @@ class Repository(
     }
 
     fun getSingleMovie(id: Int) {
+        _state.value = State.Loading
         compositeDisposable.add(serviceApi.getSingleMovie(id).subscribe({
             _movie.value = it
-        }, {}))
+            _state.value = State.Success
+        }, {
+            _state.value = State.Error
+        }))
     }
 
     fun getImageUrl(id: Int, url: (String) -> Unit) {
@@ -339,7 +342,6 @@ class Repository(
             url(it.posterUrlPreview)
         }, {}))
     }
-
 
     fun getMovies() {
 
@@ -380,10 +382,9 @@ class Repository(
     private fun getNewMovie() {
         compositeDisposable.add(
             serviceApi.getNewMovies(year = Helper.getYear(), month = Helper.getMonth()).subscribe({
-                _state.value = State.Success
                 _newMovies.value = it
             }, {
-                _state.value = State.ServerError(it.message ?: "Error 5xx")
+                _state.value = State.Error
             })
         )
     }
@@ -397,18 +398,20 @@ class Repository(
     private fun getTopMovies() {
         compositeDisposable.add(
             serviceApi.getTop().subscribe({
-                _state.value = State.Success
                 _topMovies.value = it
-            }, {})
+            }, {
+                _state.value = State.Error
+            })
         )
     }
 
     private fun getSeries() {
         compositeDisposable.add(
             serviceApi.getSeries().subscribe({
-                _state.value = State.Success
                 _topSeries.value = it
-            }, {})
+            }, {
+                _state.value = State.Error
+            })
         )
     }
 
@@ -434,6 +437,8 @@ class Repository(
 
                         if (randomFilms.items.isNotEmpty()) {
 
+                            _state.value = State.Success
+
                             sharedPreferencesManager.saveCountryId(it.countries[randomCountry].id)
                             sharedPreferencesManager.saveGenreId(it.genres[randomGenre].id)
 
@@ -454,7 +459,7 @@ class Repository(
                                 serviceApi.getFilms(
                                     1, 1
                                 ).subscribe({ randomFilms2 ->
-
+                                    _state.value = State.Success
                                     _randomName.value = "${
                                         it.genres[0].genre.replaceFirstChar { latter ->
                                             if (latter.isLowerCase()) latter.titlecase(
@@ -465,22 +470,29 @@ class Repository(
 
                                     _randomMovies.value = randomFilms2
 
-                                }, {})
+                                }, {
+                                    _state.value = State.Error
+                                })
                             )
                         }
-                    }, {})
+                    }, {
+                        _state.value = State.Error
+                    })
                 )
 
-            }, {})
+            }, {
+                _state.value = State.Error
+            })
         )
     }
 
     private fun getTop250() {
         compositeDisposable.add(
             serviceApi.getTop(type = Constants.TOP_250_BEST_FILMS).subscribe({
-                _state.value = State.Success
                 _top250Movies.value = it
-            }, {})
+            }, {
+                _state.value = State.Error
+            })
         )
     }
 

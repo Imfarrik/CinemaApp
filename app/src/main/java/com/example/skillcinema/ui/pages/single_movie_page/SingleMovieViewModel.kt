@@ -7,6 +7,7 @@ import com.example.skillcinema.App
 import com.example.skillcinema.domain.SharedPreferencesManager
 import com.example.skillcinema.model.data.db.*
 import com.example.skillcinema.model.repository.Repository
+import com.example.skillcinema.model.repository.State
 import com.example.skillcinema.room.AppDatabase
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -34,9 +35,19 @@ class SingleMovieViewModel : ViewModel() {
     private val _allCollections = MutableLiveData<List<CollectionHolder>>()
     val allCollections = _allCollections
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading = _isLoading
+
+    private val _isSuccess = MutableLiveData<Boolean>()
+    val isSuccess = _isSuccess
+
+    private val _onError = MutableLiveData(false)
+    val onError = _onError
+
     init {
         App.getAppComponent().inject(this)
         getDBData()
+        getState()
     }
 
     val movie = repository.movie
@@ -122,6 +133,30 @@ class SingleMovieViewModel : ViewModel() {
         viewModelScope.launch {
             _allSaved.value = appDatabase.collectionDao().getAllSavedMovie()
         }
+    }
+
+    private fun getState() {
+        viewModelScope.launch {
+            repository.state.collect {
+                when (it) {
+                    State.Loading -> {
+                        _isLoading.value = true
+                        _isSuccess.value = false
+                    }
+                    is State.Error -> {
+                        _isLoading.value = true
+                        _isSuccess.value = false
+                        _onError.value = true
+                    }
+                    State.Success -> {
+                        _isLoading.value = false
+                        _isSuccess.value = true
+                    }
+                    null -> {}
+                }
+            }
+        }
+
     }
 
 

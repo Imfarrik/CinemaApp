@@ -11,8 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.skillcinema.databinding.FragmentAllMoviesCollectionBinding
-import com.example.skillcinema.ui.adapters.all_movies.InterestedAdapter
-import com.example.skillcinema.ui.adapters.all_movies.WatchedAdapter
+import com.example.skillcinema.ui.adapters.all_movies.*
 import com.example.skillcinema.ui.helpers.Helper
 import com.example.skillcinema.ui.helpers.Navigator
 
@@ -41,6 +40,10 @@ class AllMoviesCollectionFragment : Fragment() {
     }
 
     private fun initView() = with(vb) {
+
+        header.btnBack.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
 
         movieRv.layoutManager = GridLayoutManager(requireContext(), 2)
 
@@ -79,6 +82,40 @@ class AllMoviesCollectionFragment : Fragment() {
             }
             else -> {
 
+                header.headerTitle.text = args.title
+
+                when (args.title) {
+                    "Хочу посмотреть" -> {
+                        viewModel.getSaved()
+                        viewModel.allSaved.observe(viewLifecycleOwner) {
+                            movieRv.adapter = SavedMoviesAdapter(it) { film_id ->
+                                Navigator.actionAllMoviesFragmentToSingleMovieFragment(
+                                    findNavController(), film_id
+                                )
+                            }
+                        }
+                    }
+                    "Любимое" -> {
+                        viewModel.getLiked()
+                        viewModel.allLiked.observe(viewLifecycleOwner) {
+                            movieRv.adapter = LikedMoviesAdapter(it) { film_id ->
+                                Navigator.actionAllMoviesFragmentToSingleMovieFragment(
+                                    findNavController(), film_id
+                                )
+                            }
+                        }
+                    }
+                    else -> {
+                        viewModel.getAllMoviesInCollection(args.title)
+                        viewModel.allMoviesInCollection.observe(viewLifecycleOwner) {
+                            movieRv.adapter = MovieInCollectionAdapter(it) { film_id ->
+                                Navigator.actionAllMoviesFragmentToSingleMovieFragment(
+                                    findNavController(), film_id
+                                )
+                            }
+                        }
+                    }
+                }
 
 
             }

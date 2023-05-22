@@ -25,9 +25,7 @@ class TypeAdapter(
     }
 
     override fun onBindViewHolder(holder: TypeVH, position: Int) {
-
-        val item = data.items[position]
-        holder.initView(item, position)
+        holder.initView(position)
 
     }
 
@@ -38,7 +36,7 @@ class TypeAdapter(
     inner class TypeVH(private val binding: ItemTypeBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun initView(item: Item, pos: Int) = with(binding) {
+        fun initView(pos: Int) = with(binding) {
 
             typeCount.isVisible = false
 

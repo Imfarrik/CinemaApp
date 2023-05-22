@@ -30,7 +30,7 @@ class HomeViewModel : ViewModel() {
     private val _isSuccess = MutableLiveData<Boolean>()
     val isSuccess = _isSuccess
 
-    private val _onError = MutableLiveData<String>()
+    private val _onError = MutableLiveData(false)
     val onError = _onError
 
 
@@ -51,10 +51,10 @@ class HomeViewModel : ViewModel() {
                         _isLoading.value = true
                         _isSuccess.value = false
                     }
-                    is State.ServerError -> {
+                    is State.Error -> {
                         _isLoading.value = true
                         _isSuccess.value = false
-                        _onError.value = it.message
+                        _onError.value = true
                     }
                     State.Success -> {
                         _isLoading.value = false

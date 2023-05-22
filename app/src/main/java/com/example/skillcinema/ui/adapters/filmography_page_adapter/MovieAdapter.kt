@@ -37,7 +37,7 @@ class MovieAdapter(
     override fun onBindViewHolder(holder: TypeVH, position: Int) {
 
         val movie = movies[position]
-        holder.initView(movie, position)
+        holder.initView(movie)
 
     }
 
@@ -48,7 +48,7 @@ class MovieAdapter(
     inner class TypeVH(private val binding: ItemMoviesGridBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun initView(item: Film, pos: Int) = with(binding) {
+        fun initView(item: Film) = with(binding) {
 
             itemView.setOnClickListener {
                 clickListener(item.filmId)
